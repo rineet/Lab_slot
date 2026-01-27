@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Faculty Dashboard - Lab Booking System</title>
+  <link rel="stylesheet" href="/css/styles.css" />
+  <script defer src="/js/app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      app.requireAuth(['Faculty', 'Admin']);
+      app.loadFacultyPending('pending-list');
+    });
+  </script>
+</head>
+
+<body>
+  <div class="shell">
+    <header>
+      <h2>Faculty Dashboard</h2>
+      <div id="user-info">
+        <span id="user-badge" class="muted" style="margin-right: 16px;"></span>
+        <button id="logout-btn" class="secondary">Logout</button>
+      </div>
+    </header>
+
+    <nav>
+      <a href="/index.html">Home</a>
+      <a href="/approvals.html">Approvals</a>
+      <a href="/calendar.html">Resource Calendar</a>
+    </nav>
+
+    <div class="card">
+      <h3>Pending Requests</h3>
+      <p class="card-subtitle">Review student booking requests and provide a decision (Approve/Reject).</p>
+      <div id="pending-list" class="grid"></div>
+    </div>
+
+    <footer>
+      &copy; 2026 University Lab Booking System. All rights reserved.
+    </footer>
+  </div>
+</body>
+
+</html>

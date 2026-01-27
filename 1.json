@@ -1,0 +1,189 @@
+{
+    "project": {
+      "name": "Research Lab Slot Booking System",
+      "type": "Full Stack Web Application",
+      "goal": "End-to-end system for scheduling, approving, and managing research lab resources with role-based workflows, conflict-free booking, auditability, and policy enforcement."
+    },
+  
+    "tech_stack": {
+      "frontend": "HTML, CSS, JavaScript",
+      "backend": "Node.js, Express",
+      "database": "MongoDB with Mongoose",
+      "authentication": "JWT-based authentication",
+      "passwords": "bcrypt hashing",
+      "deployment_ready": true
+    },
+  
+    "architecture": {
+      "pattern": "MVC",
+      "folders": {
+        "backend": ["config", "models", "controllers", "routes", "middleware", "utils"],
+        "frontend": ["public", "css", "js", "pages"],
+        "root": ["server.js", "package.json", "README.md"]
+      }
+    },
+  
+    "roles": ["Student", "Faculty", "Admin"],
+  
+    "state_machines": {
+      "slot_request_lifecycle": ["CREATED", "PENDING", "APPROVED", "REJECTED", "CANCELLED", "EXPIRED"]
+    },
+  
+    "business_rules": [
+      "No overlapping APPROVED slots for same resource",
+      "Students have weekly and daily hour limits",
+      "Faculty can approve only their supervisees",
+      "Admin can override any decision",
+      "Expired slots auto-close",
+      "Cancelled slots free the resource immediately"
+    ],
+  
+    "data_models": {
+      "User": {
+        "fields": {
+          "name": "String",
+          "email": "String(unique)",
+          "passwordHash": "String",
+          "role": "Student|Faculty|Admin",
+          "supervisorId": "ObjectId(nullable)",
+          "isActive": "Boolean"
+        }
+      },
+      "Resource": {
+        "fields": {
+          "name": "String",
+          "type": "Lab|GPU|Equipment",
+          "location": "String",
+          "description": "String",
+          "isActive": "Boolean"
+        }
+      },
+      "SlotRequest": {
+        "fields": {
+          "studentId": "ObjectId",
+          "facultyId": "ObjectId",
+          "resourceId": "ObjectId",
+          "startTime": "Date",
+          "endTime": "Date",
+          "purpose": "String",
+          "status": "CREATED|PENDING|APPROVED|REJECTED|CANCELLED|EXPIRED",
+          "decisionReason": "String",
+          "createdAt": "Date"
+        }
+      },
+      "Policy": {
+        "fields": {
+          "maxHoursPerDay": "Number",
+          "maxHoursPerWeek": "Number",
+          "maxActiveRequests": "Number"
+        }
+      },
+      "AuditLog": {
+        "fields": {
+          "actorId": "ObjectId",
+          "action": "String",
+          "entityType": "String",
+          "entityId": "ObjectId",
+          "timestamp": "Date",
+          "metadata": "Object"
+        }
+      }
+    },
+  
+    "api_spec": {
+      "auth": {
+        "POST /api/auth/register": "Register user",
+        "POST /api/auth/login": "Login user",
+        "POST /api/auth/logout": "Logout user"
+      },
+      "resources": {
+        "GET /api/resources": "List resources",
+        "POST /api/resources": "Create resource (Admin)",
+        "PUT /api/resources/:id": "Update resource (Admin)",
+        "DELETE /api/resources/:id": "Soft delete resource (Admin)"
+      },
+      "slots": {
+        "POST /api/slots/request": "Create slot request",
+        "POST /api/slots/cancel/:id": "Cancel request",
+        "GET /api/slots/my": "My requests",
+        "GET /api/slots/resource/:id": "Calendar view",
+        "POST /api/slots/approve/:id": "Faculty approves",
+        "POST /api/slots/reject/:id": "Faculty rejects"
+      },
+      "admin": {
+        "GET /api/admin/users": "List users",
+        "PUT /api/admin/users/:id/role": "Change role",
+        "PUT /api/admin/policies": "Update policy"
+      }
+    },
+  
+    "middleware": [
+      "authMiddleware",
+      "roleMiddleware",
+      "validationMiddleware",
+      "errorHandler"
+    ],
+  
+    "scheduling_engine": {
+      "conflict_rule": "Reject if any APPROVED slot overlaps same resource",
+      "overlap_formula": "(new.start < existing.end) AND (new.end > existing.start)"
+    },
+  
+    "validation_rules": [
+      "Start time must be in future",
+      "End time must be after start time",
+      "Purpose required",
+      "Resource must be active",
+      "Student must not exceed quota"
+    ],
+  
+    "ui_pages": {
+      "public": ["index.html", "login.html", "register.html"],
+      "student": ["student-dashboard.html", "browse.html", "calendar.html", "request.html", "history.html"],
+      "faculty": ["faculty-dashboard.html", "approvals.html", "schedule.html"],
+      "admin": ["admin-dashboard.html", "manage-users.html", "manage-resources.html", "manage-policies.html"]
+    },
+  
+    "ui_behavior": [
+      "Hide actions based on role",
+      "Show real-time status badges",
+      "Disable invalid date selections",
+      "Show conflict errors clearly"
+    ],
+  
+    "security": [
+      "JWT expiry",
+      "Password hashing",
+      "No direct object access without permission",
+      "Server-side validation always"
+    ],
+  
+    "logging": {
+      "log_every": ["login", "request_create", "approve", "reject", "cancel", "policy_change"]
+    },
+  
+    "testing": {
+      "manual_test_cases_required": true,
+      "edge_cases": [
+        "Simultaneous booking attempts",
+        "Faculty approving already expired request",
+        "Student cancelling approved slot"
+      ]
+    },
+  
+    "seed_data": {
+      "create_admin": true,
+      "create_faculty": true,
+      "create_students": 10,
+      "create_resources": 5
+    },
+  
+    "instructions_to_ai": [
+      "Generate complete backend and frontend",
+      "Follow MVC strictly",
+      "Implement all rules and validations",
+      "Do not leave TODOs",
+      "Ensure project runs after npm install and node server.js"
+    ]
+  }
+  

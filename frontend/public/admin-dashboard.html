@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard - Lab Booking System</title>
+  <link rel="stylesheet" href="/css/styles.css" />
+  <script defer src="/js/app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      app.requireAuth(['Admin']);
+      app.loadUsers('user-table');
+      app.loadPolicyToForm('policy-form');
+      app.handlePolicyForm();
+      app.populateFacultySelect('resourceFaculty');
+      app.handleCreateResourceForm();
+      app.loadAdminResources('admin-resource-list');
+    });
+  </script>
+</head>
+
+<body>
+  <div class="shell">
+    <header>
+      <h2>Admin Control Center</h2>
+      <div id="user-info">
+        <span id="user-badge" class="muted" style="margin-right: 16px;"></span>
+        <button id="logout-btn" class="secondary">Logout</button>
+      </div>
+    </header>
+
+    <nav>
+      <a href="/index.html">Home</a>
+      <a href="/manage-resources.html">Resources</a>
+      <a href="/manage-users.html">Users</a>
+      <a href="/calendar.html">Calendar</a>
+    </nav>
+
+    <div class="layout-two-col">
+      <section>
+        <div class="card">
+          <h3>System Policies</h3>
+          <p class="card-subtitle">Define usage limits for students across the platform.</p>
+          <form id="policy-form">
+            <div class="form-group">
+              <label>Max Hours Per Day</label>
+              <input name="maxHoursPerDay" type="number" />
+            </div>
+            <div class="form-group">
+              <label>Max Hours Per Week</label>
+              <input name="maxHoursPerWeek" type="number" />
+            </div>
+            <div class="form-group">
+              <label>Max Active Requests</label>
+              <input name="maxActiveRequests" type="number" />
+            </div>
+            <button type="submit">Update Policy</button>
+          </form>
+          <div id="policy-msg" style="margin-top: 12px; font-size: 0.875rem;"></div>
+        </div>
+
+        <div class="card">
+          <h3>User Management</h3>
+          <p class="card-subtitle">Modify roles and account activation status.</p>
+          <div id="user-table"></div>
+        </div>
+      </section>
+
+      <aside>
+        <div class="card">
+          <h3>Create New Resource</h3>
+          <p class="card-subtitle">Add labs or equipment to the system.</p>
+          <form id="resource-form">
+            <div class="form-group">
+              <label>Name</label>
+              <input name="name" required />
+            </div>
+            <div class="form-group">
+              <label>Type</label>
+              <select name="type" required>
+                <option value="Lab">Lab</option>
+                <option value="GPU">GPU</option>
+                <option value="Equipment">Equipment</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Strength (Capacity)</label>
+              <input type="number" name="capacity" required placeholder="30" />
+            </div>
+            <div class="form-group">
+              <label>Assigned Faculty</label>
+              <select id="resourceFaculty" name="assignedFacultyId" required></select>
+            </div>
+            <div class="form-group">
+              <label>Location</label>
+              <input name="location" required />
+            </div>
+            <div class="form-group">
+              <label>Description</label>
+              <textarea name="description"></textarea>
+            </div>
+            <button type="submit">Deploy Resource</button>
+          </form>
+          <div id="resource-msg" style="margin-top: 12px; font-size: 0.875rem;"></div>
+        </div>
+
+        <div class="card">
+          <h3>Environment Status</h3>
+          <p class="card-subtitle">Current active resources in the system.</p>
+          <div id="admin-resource-list"></div>
+        </div>
+      </aside>
+    </div>
+
+    <footer>
+      &copy; 2026 University Lab Booking System. All rights reserved.
+    </footer>
+  </div>
+</body>
+
+</html>

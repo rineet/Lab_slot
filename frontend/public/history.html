@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Request History - Lab Booking System</title>
+  <link rel="stylesheet" href="/css/styles.css" />
+  <script defer src="/js/app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      app.requireAuth(['Student', 'Admin']);
+      app.loadMyRequests('history-list');
+    });
+  </script>
+</head>
+
+<body>
+  <div class="shell">
+    <header>
+      <h2>My Request History</h2>
+      <div id="user-info">
+        <span id="user-badge" class="muted" style="margin-right: 16px;"></span>
+        <button id="logout-btn" class="secondary">Logout</button>
+      </div>
+    </header>
+
+    <nav>
+      <a href="/index.html">Home</a>
+      <a href="/student-dashboard.html">Dashboard</a>
+      <a href="/calendar.html">Calendar</a>
+    </nav>
+
+    <div class="card">
+      <h3>Recent Bookings</h3>
+      <p class="card-subtitle">List of all your requested time slots and their current status.</p>
+      <div id="history-list"></div>
+    </div>
+
+    <footer>
+      &copy; 2026 University Lab Booking System. All rights reserved.
+    </footer>
+  </div>
+</body>
+
+</html>

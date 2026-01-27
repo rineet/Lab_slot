@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>New Request - Lab Booking System</title>
+  <link rel="stylesheet" href="/css/styles.css" />
+  <script defer src="/js/app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      app.requireAuth(['Student', 'Admin']);
+      app.populateResourceSelect('resourceId', 'assigned-faculty');
+      app.handleRequestForm();
+    });
+  </script>
+</head>
+
+<body>
+  <div class="shell">
+    <header>
+      <h2>Create New Booking</h2>
+      <div id="user-info">
+        <span id="user-badge" class="muted" style="margin-right: 16px;"></span>
+        <button id="logout-btn" class="secondary">Logout</button>
+      </div>
+    </header>
+
+    <nav>
+      <a href="/index.html">Home</a>
+      <a href="/student-dashboard.html">Dashboard</a>
+      <a href="/calendar.html">View Schedule</a>
+    </nav>
+
+    <div class="auth-wrapper" style="min-height: auto;">
+      <div class="card auth-card" style="max-width: 600px;">
+        <h3>Request Details</h3>
+        <p class="card-subtitle">Pick a resource and specify your booking window.</p>
+
+        <form id="request-form">
+          <div class="form-group">
+            <label>Resource</label>
+            <select id="resourceId" name="resourceId" required></select>
+            <div class="muted" style="margin-top: -12px; margin-bottom: 20px;">
+              Assigned Faculty: <span id="assigned-faculty" style="font-weight:600; color:var(--text-main)">-</span> |
+              Capacity: <span id="resource-capacity" style="font-weight:600; color:var(--text-main)">-</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Number of Attendees</label>
+            <input type="number" name="attendees" required min="1" placeholder="How many people?" />
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+            <div class="form-group">
+              <label>Start Time</label>
+              <input name="startTime" type="datetime-local" required />
+            </div>
+            <div class="form-group">
+              <label>End Time</label>
+              <input name="endTime" type="datetime-local" required />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Purpose of Visit</label>
+            <textarea name="purpose" required placeholder="Describe your research activity..."></textarea>
+          </div>
+
+          <button type="submit">Submit Request</button>
+        </form>
+        <div id="request-msg" style="margin-top: 16px; text-align: center; font-size: 0.875rem;"></div>
+      </div>
+    </div>
+
+    <footer>
+      &copy; 2026 University Lab Booking System. All rights reserved.
+    </footer>
+  </div>
+</body>
+
+</html>

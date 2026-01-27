@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Manage Policies - Lab Booking System</title>
+  <link rel="stylesheet" href="/css/styles.css" />
+  <script defer src="/js/app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      app.requireAuth(['Admin']);
+      app.loadPolicyToForm('policy-form');
+      app.handlePolicyForm();
+    });
+  </script>
+</head>
+
+<body>
+  <div class="shell">
+    <header>
+      <h2>Global Policies</h2>
+      <div id="user-info">
+        <span id="user-badge" class="muted" style="margin-right: 16px;"></span>
+        <button id="logout-btn" class="secondary">Logout</button>
+      </div>
+    </header>
+
+    <nav>
+      <a href="/index.html">Home</a>
+      <a href="/admin-dashboard.html">Dashboard</a>
+    </nav>
+
+    <div class="auth-wrapper" style="min-height: auto;">
+      <div class="card auth-card">
+        <h3>System Governance</h3>
+        <p class="card-subtitle">Set boundaries for fair resource allocation.</p>
+        <form id="policy-form">
+          <div class="form-group">
+            <label>Max Hours Per Day</label>
+            <input name="maxHoursPerDay" type="number" value="4" />
+          </div>
+          <div class="form-group">
+            <label>Max Hours Per Week</label>
+            <input name="maxHoursPerWeek" type="number" value="12" />
+          </div>
+          <div class="form-group">
+            <label>Max Active Requests</label>
+            <input name="maxActiveRequests" type="number" value="3" />
+          </div>
+          <button type="submit">Enforce Policy</button>
+        </form>
+        <div id="policy-msg" style="margin-top: 16px; text-align: center; font-size: 0.875rem;"></div>
+      </div>
+    </div>
+
+    <footer>
+      &copy; 2026 University Lab Booking System. All rights reserved.
+    </footer>
+  </div>
+</body>
+
+</html>
