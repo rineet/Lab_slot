@@ -43,3 +43,5 @@ End-to-end system for scheduling, approving, and managing research lab resources
 - Cancel approved request and verify status.
 - Admin updates policy to tighten limits and verify enforcement on new requests.
 
+
+# Lab_slot
