@@ -10,7 +10,7 @@
   <script defer src="/js/app.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', async () => {
-      app.requireAuth();
+      await app.requireAuth();
 
       const calendarEl = document.getElementById('calendar');
       const calendar = new FullCalendar.Calendar(calendarEl, {
@@ -23,9 +23,11 @@
         events: [],
         eventClick: (info) => {
           alert(
-            'Event: ' + info.event.title + '\n' +
+            'Lab: ' + info.event.title + '\n' +
             'Status: ' + info.event.extendedProps.status + '\n' +
-            'Booked by: ' + (info.event.extendedProps.bookedBy || 'Unknown')
+            'Booked by: ' + (info.event.extendedProps.bookedBy || 'Unknown') + '\n' +
+            'Attendees: ' + (info.event.extendedProps.attendees ?? '-') + '\n' +
+            'Capacity: ' + (info.event.extendedProps.capacity ?? '-')
           );
         },
         themeSystem: 'standard'
@@ -35,6 +37,7 @@
 
       await app.populateResourceSelect('resourceId');
       onResourceChange();
+      app.highlightActiveNav();
     });
 
     function onResourceChange() {
@@ -45,7 +48,7 @@
     }
   </script>
   <style>
-    .fc {
+    :root {
       --fc-button-bg-color: var(--primary);
       --fc-button-border-color: var(--primary);
       --fc-button-hover-bg-color: var(--primary-hover);

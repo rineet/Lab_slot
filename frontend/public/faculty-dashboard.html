@@ -8,9 +8,15 @@
   <link rel="stylesheet" href="/css/styles.css" />
   <script defer src="/js/app.js"></script>
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      app.requireAuth(['Faculty', 'Admin']);
+    document.addEventListener('DOMContentLoaded', async () => {
+      await app.requireAuth(['Faculty', 'Admin']);
       app.loadFacultyPending('pending-list');
+      app.handleAttendanceUploadForm();
+      app.handleMarksUploadForm();
+      app.handleAttendancePublishForm();
+      app.handleMarksPublishForm();
+      app.handleChangePasswordForm('change-password-form', 'change-password-msg');
+      app.highlightActiveNav();
     });
   </script>
 </head>
@@ -27,14 +33,100 @@
 
     <nav>
       <a href="/index.html">Home</a>
+      <a href="/faculty-dashboard.html">Dashboard</a>
       <a href="/approvals.html">Approvals</a>
       <a href="/calendar.html">Resource Calendar</a>
+      <a href="/complaints.html">Complaints</a>
     </nav>
 
-    <div class="card">
-      <h3>Pending Requests</h3>
-      <p class="card-subtitle">Review student booking requests and provide a decision (Approve/Reject).</p>
-      <div id="pending-list" class="grid"></div>
+    <div class="layout-two-col">
+      <section>
+        <div class="card">
+          <h3>Pending Requests</h3>
+          <p class="card-subtitle">Review student booking requests and provide a decision (Approve/Reject).</p>
+          <div id="pending-list" class="grid"></div>
+        </div>
+      </section>
+      <aside>
+        <div class="card">
+          <h3>Bulk Attendance Upload</h3>
+          <p class="card-subtitle">Excel columns: Roll Number, Attendance, Subject Code, Month (YYYY-MM), Total Classes (optional if set below).</p>
+          <form id="attendance-upload-form">
+            <label>Total Classes</label>
+            <input name="totalClasses" type="number" min="1" placeholder="e.g. 24" required />
+            <label>Attendance Excel</label>
+            <div class="file-input-wrapper">
+              <input type="file" id="attendance-file" name="file" accept=".xlsx" class="file-input-hidden" required />
+              <label for="attendance-file" class="file-input-label">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="16 16 12 12 8 16"></polyline>
+                  <line x1="12" y1="12" x2="12" y2="21"></line>
+                  <path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"></path>
+                </svg>
+                <span id="attendance-file-name">Click to upload or drag file here</span>
+              </label>
+            </div>
+            <button type="submit">Upload Attendance</button>
+          </form>
+          <form id="attendance-publish-form" style="margin-top: 8px;">
+            <label>Publish for Subject Code</label>
+            <input type="text" name="subjectCode" placeholder="e.g. CS101" required />
+            <label>Month</label>
+            <input type="text" name="month" placeholder="e.g. 2026-02" required />
+            <button type="submit">Publish Attendance</button>
+          </form>
+          <div id="attendance-upload-msg" class="muted" style="margin-top: 8px;"></div>
+        </div>
+
+        <div class="card">
+          <h3>Bulk Marks Upload</h3>
+          <p class="card-subtitle">Excel columns: Student ID, Subject Code, Assessment Type, Max Marks, Obtained Marks.</p>
+          <form id="marks-upload-form">
+            <label>Marks Excel</label>
+            <div class="file-input-wrapper">
+              <input type="file" id="marks-file" name="file" accept=".xlsx" class="file-input-hidden" required />
+              <label for="marks-file" class="file-input-label">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="16 16 12 12 8 16"></polyline>
+                  <line x1="12" y1="12" x2="12" y2="21"></line>
+                  <path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"></path>
+                </svg>
+                <span id="marks-file-name">Click to upload or drag file here</span>
+              </label>
+            </div>
+            <button type="submit">Upload Marks</button>
+          </form>
+          <form id="marks-publish-form" style="margin-top: 8px;">
+            <label>Publish for Subject Code</label>
+            <input type="text" name="subjectCode" placeholder="e.g. CS101" required />
+            <label>Assessment Type</label>
+            <input type="text" name="assessmentType" placeholder="e.g. MIDTERM" required />
+            <button type="submit">Publish Marks</button>
+          </form>
+          <div id="marks-upload-msg" class="muted" style="margin-top: 8px;"></div>
+        </div>
+
+        <div class="card">
+          <h3>Change Password</h3>
+          <p class="card-subtitle">Keep your account secure with a strong password.</p>
+          <form id="change-password-form">
+            <div class="form-group">
+              <label>Current Password</label>
+              <input name="currentPassword" type="password" required />
+            </div>
+            <div class="form-group">
+              <label>New Password</label>
+              <input name="newPassword" type="password" required />
+            </div>
+            <div class="form-group">
+              <label>Confirm New Password</label>
+              <input name="confirmPassword" type="password" required />
+            </div>
+            <button type="submit">Update Password</button>
+          </form>
+          <div id="change-password-msg" style="margin-top: 12px; font-size: 0.875rem;"></div>
+        </div>
+      </aside>
     </div>
 
     <footer>

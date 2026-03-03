@@ -1,7 +1,11 @@
 const mongoose = require('mongoose');
 
 const connectDB = async () => {
-  const uri = process.env.MONGO_URI || 'mongodb+srv://arshadmansuri1825:u1AYlNbjuA5FpHbb@cluster1.2majmfd.mongodb.net/Lab_slot';
+  const uri = process.env.MONGO_URI || process.env.MongoDB_URI;
+  if (!uri) {
+    console.error('MongoDB connection error: MONGO_URI is not set');
+    process.exit(1);
+  }
   try {
     await mongoose.connect(uri, {
       serverSelectionTimeoutMS: 5000

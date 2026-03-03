@@ -3,7 +3,9 @@ const User = require('../models/User');
 
 const authMiddleware = async (req, res, next) => {
   const authHeader = req.headers.authorization || '';
-  const token = authHeader.startsWith('Bearer ') ? authHeader.split(' ')[1] : null;
+  const headerToken = authHeader.startsWith('Bearer ') ? authHeader.split(' ')[1] : null;
+  const cookieToken = req.cookies?.token || null;
+  const token = cookieToken || headerToken;
 
   if (!token) {
     return res.status(401).json({ message: 'No token, authorization denied' });

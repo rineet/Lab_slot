@@ -2,9 +2,10 @@ const express = require('express');
 const path = require('path');
 const morgan = require('morgan');
 const cors = require('cors');
+const cookieParser = require('cookie-parser');
 const dotenv = require('dotenv');
 
-dotenv.config();
+dotenv.config({ path: path.join(__dirname, 'backend', '.env') });
 
 const connectDB = require('./backend/config/db');
 const errorHandler = require('./backend/middleware/errorHandler');
@@ -15,6 +16,10 @@ const resourceRoutes = require('./backend/routes/resourceRoutes');
 const slotRoutes = require('./backend/routes/slotRoutes');
 const adminRoutes = require('./backend/routes/adminRoutes');
 const userRoutes = require('./backend/routes/userRoutes');
+const attendanceRoutes = require('./backend/routes/attendanceRoutes');
+const marksRoutes = require('./backend/routes/marksRoutes');
+const complaintRoutes = require('./backend/routes/complaintRoutes');
+const analyticsRoutes = require('./backend/routes/analyticsRoutes');
 
 const app = express();
 
@@ -22,8 +27,9 @@ const app = express();
 connectDB();
 
 // Middleware
-app.use(cors());
+app.use(cors({ origin: true, credentials: true }));
 app.use(express.json());
+app.use(cookieParser());
 app.use(morgan('dev'));
 
 // API routes
@@ -32,6 +38,10 @@ app.use('/api/resources', resourceRoutes);
 app.use('/api/slots', slotRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/attendance', attendanceRoutes);
+app.use('/api/marks', marksRoutes);
+app.use('/api/complaints', complaintRoutes);
+app.use('/api/analytics', analyticsRoutes);
 
 // Serve static frontend
 const publicPath = path.join(__dirname, 'frontend', 'public');

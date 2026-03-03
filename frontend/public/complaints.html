@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Complaints - CampusFlow</title>
+  <link rel="stylesheet" href="/css/styles.css" />
+  <script defer src="/js/app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      const user = await app.requireAuth(['Student', 'Faculty', 'Admin']);
+      const userRole = user?.role || 'Student';
+      
+      app.highlightActiveNav();
+      
+      // Show appropriate view based on user role
+      if (userRole === 'Admin') {
+        document.getElementById('admin-view').style.display = 'block';
+        app.loadAllComplaints('all-complaints-list');
+      } else if (userRole === 'Faculty') {
+        document.getElementById('faculty-view').style.display = 'block';
+        app.loadFacultyComplaints('faculty-complaints-list');
+      } else {
+        document.getElementById('student-view').style.display = 'block';
+        app.populateResourceSelect('complaint-venue', null);
+        app.handleComplaintForm();
+        app.loadMyComplaints('complaints-list');
+      }
+    });
+  </script>
+</head>
+
+<body>
+  <div class="shell">
+    <header>
+      <h2>Complaints</h2>
+      <div id="user-info">
+        <span id="user-badge" class="muted" style="margin-right: 16px;"></span>
+        <button id="logout-btn" class="secondary">Logout</button>
+      </div>
+    </header>
+
+    <nav>
+      <a href="/index.html">Home</a>
+      <a href="#" onclick="history.back(); return false;">&larr; Back</a>
+    </nav>
+
+    <!-- Student View -->
+    <div id="student-view" class="layout-two-col" style="display:none;">
+      <section>
+        <div class="card">
+          <h3>My Complaints</h3>
+          <p class="card-subtitle">Track lifecycle: OPEN → ASSIGNED → IN_PROGRESS → RESOLVED → CLOSED.</p>
+          <div id="complaints-list"></div>
+        </div>
+      </section>
+      <aside>
+        <div class="card">
+          <h3>Raise New Complaint</h3>
+          <form id="complaint-form">
+            <label>Lab / Resource</label>
+            <select id="complaint-venue" name="venueId" required>
+              <option value="">-- Select a Resource --</option>
+            </select>
+            <label>Category</label>
+            <input type="text" name="category" required placeholder="e.g. Infrastructure, Exam, Scheduling" />
+            <label>Description</label>
+            <textarea name="description" required></textarea>
+            <button type="submit">Submit Complaint</button>
+          </form>
+          <div id="complaint-msg" class="muted"></div>
+        </div>
+      </aside>
+    </div>
+
+    <!-- Faculty View -->
+    <div id="faculty-view" style="display:none;">
+      <section class="card" style="margin: 24px;">
+        <h3>Complaints for Your Resources</h3>
+        <p class="card-subtitle">Manage complaints related to resources assigned to you.</p>
+        <div id="faculty-complaints-list"></div>
+      </section>
+    </div>
+
+    <!-- Admin View -->
+    <div id="admin-view" style="display:none;">
+      <section class="card" style="margin: 24px;">
+        <h3>All Complaints</h3>
+        <p class="card-subtitle">Manage and track all system complaints.</p>
+        <div id="all-complaints-list"></div>
+      </section>
+    </div>
+
+    <footer>
+      &copy; 2026 University Lab Booking System. All rights reserved.
+    </footer>
+  </div>
+</body>
+
+</html>
+

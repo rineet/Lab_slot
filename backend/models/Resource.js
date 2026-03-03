@@ -7,6 +7,7 @@ const resourceSchema = new mongoose.Schema(
     location: { type: String, required: true },
     description: { type: String, default: '' },
     assignedFacultyId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', default: null },
+    requiresClubApproval: { type: Boolean, default: false },
     isActive: { type: Boolean, default: true },
     capacity: { type: Number, required: true, default: 30 }
   },

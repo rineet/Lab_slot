@@ -8,14 +8,14 @@
   <link rel="stylesheet" href="/css/styles.css" />
   <script defer src="/js/app.js"></script>
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      app.requireAuth(['Admin']);
-      app.loadUsers('user-table');
+    document.addEventListener('DOMContentLoaded', async () => {
+      await app.requireAuth(['Admin']);
       app.loadPolicyToForm('policy-form');
       app.handlePolicyForm();
-      app.populateFacultySelect('resourceFaculty');
-      app.handleCreateResourceForm();
-      app.loadAdminResources('admin-resource-list');
+      app.handleBulkStudentUploadForm();
+      app.handleBulkFacultyUploadForm();
+      app.handleChangePasswordForm('change-password-form', 'change-password-msg');
+      app.highlightActiveNav();
     });
   </script>
 </head>
@@ -32,9 +32,13 @@
 
     <nav>
       <a href="/index.html">Home</a>
+      <a href="/admin-dashboard.html">Dashboard</a>
       <a href="/manage-resources.html">Resources</a>
       <a href="/manage-users.html">Users</a>
+      <a href="/manage-hierarchy.html">Hierarchy</a>
       <a href="/calendar.html">Calendar</a>
+      <a href="/analytics.html">Analytics</a>
+      <a href="/complaints.html">Complaints</a>
     </nav>
 
     <div class="layout-two-col">
@@ -61,54 +65,70 @@
         </div>
 
         <div class="card">
-          <h3>User Management</h3>
-          <p class="card-subtitle">Modify roles and account activation status.</p>
-          <div id="user-table"></div>
+          <h3>Bulk Student Creation</h3>
+          <p class="card-subtitle">Excel columns: Email, Roll Number, Name (optional).</p>
+          <form id="bulk-student-form">
+            <div class="form-group">
+              <label>Choose Student Excel File</label>
+              <div class="file-input-wrapper">
+                <input type="file" name="file" accept=".xlsx" required id="student-file" class="file-input-hidden" />
+                <label for="student-file" class="file-input-label">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" style="width: 20px; height: 20px; margin-right: 8px;">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                  </svg>
+                  <span id="student-file-name">Click to upload or drag file here</span>
+                </label>
+              </div>
+              <div class="help-text">Supported format: .xlsx (Excel)</div>
+            </div>
+            <button type="submit" style="margin-top: 8px;">Create Students</button>
+          </form>
+          <div id="bulk-student-msg" class="muted" style="margin-top: 12px;"></div>
+        </div>
+
+        <div class="card">
+          <h3>Bulk Faculty Creation</h3>
+          <p class="card-subtitle">Excel columns: Email, Faculty ID, Name.</p>
+          <form id="bulk-faculty-form">
+            <div class="form-group">
+              <label>Choose Faculty Excel File</label>
+              <div class="file-input-wrapper">
+                <input type="file" name="file" accept=".xlsx" required id="faculty-file" class="file-input-hidden" />
+                <label for="faculty-file" class="file-input-label">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" style="width: 20px; height: 20px; margin-right: 8px;">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                  </svg>
+                  <span id="faculty-file-name">Click to upload or drag file here</span>
+                </label>
+              </div>
+              <div class="help-text">Supported format: .xlsx (Excel)</div>
+            </div>
+            <button type="submit" style="margin-top: 8px;">Create Faculty</button>
+          </form>
+          <div id="bulk-faculty-msg" class="muted" style="margin-top: 12px;"></div>
         </div>
       </section>
 
       <aside>
         <div class="card">
-          <h3>Create New Resource</h3>
-          <p class="card-subtitle">Add labs or equipment to the system.</p>
-          <form id="resource-form">
+          <h3>Change Password</h3>
+          <p class="card-subtitle">Use a strong password you do not reuse elsewhere.</p>
+          <form id="change-password-form">
             <div class="form-group">
-              <label>Name</label>
-              <input name="name" required />
+              <label>Current Password</label>
+              <input name="currentPassword" type="password" required />
             </div>
             <div class="form-group">
-              <label>Type</label>
-              <select name="type" required>
-                <option value="Lab">Lab</option>
-                <option value="GPU">GPU</option>
-                <option value="Equipment">Equipment</option>
-              </select>
+              <label>New Password</label>
+              <input name="newPassword" type="password" required />
             </div>
             <div class="form-group">
-              <label>Strength (Capacity)</label>
-              <input type="number" name="capacity" required placeholder="30" />
+              <label>Confirm New Password</label>
+              <input name="confirmPassword" type="password" required />
             </div>
-            <div class="form-group">
-              <label>Assigned Faculty</label>
-              <select id="resourceFaculty" name="assignedFacultyId" required></select>
-            </div>
-            <div class="form-group">
-              <label>Location</label>
-              <input name="location" required />
-            </div>
-            <div class="form-group">
-              <label>Description</label>
-              <textarea name="description"></textarea>
-            </div>
-            <button type="submit">Deploy Resource</button>
+            <button type="submit">Update Password</button>
           </form>
-          <div id="resource-msg" style="margin-top: 12px; font-size: 0.875rem;"></div>
-        </div>
-
-        <div class="card">
-          <h3>Environment Status</h3>
-          <p class="card-subtitle">Current active resources in the system.</p>
-          <div id="admin-resource-list"></div>
+          <div id="change-password-msg" style="margin-top: 12px; font-size: 0.875rem;"></div>
         </div>
       </aside>
     </div>

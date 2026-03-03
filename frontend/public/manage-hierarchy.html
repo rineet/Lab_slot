@@ -4,13 +4,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Manage Users - Lab Booking System</title>
+  <title>Faculty Hierarchy - Lab Booking System</title>
   <link rel="stylesheet" href="/css/styles.css" />
   <script defer src="/js/app.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', async () => {
       await app.requireAuth(['Admin']);
-      app.loadUsers('user-table');
+      app.loadFacultyHierarchy('faculty-hierarchy-table');
       app.highlightActiveNav();
     });
   </script>
@@ -19,7 +19,7 @@
 <body>
   <div class="shell">
     <header>
-      <h2>User Administration</h2>
+      <h2>Faculty Hierarchy</h2>
       <div id="user-info">
         <span id="user-badge" class="muted" style="margin-right: 16px;"></span>
         <button id="logout-btn" class="secondary">Logout</button>
@@ -38,9 +38,9 @@
     </nav>
 
     <div class="card">
-      <h3>Directory Management</h3>
-      <p class="card-subtitle">Control user roles and system access status.</p>
-      <div id="user-table"></div>
+      <h3>Hierarchy Assignments</h3>
+      <p class="card-subtitle">Set Faculty hierarchy roles used for approval flow: Club Incharge → HOD → Associate Dean.</p>
+      <div id="faculty-hierarchy-table"></div>
     </div>
 
     <footer>

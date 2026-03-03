@@ -12,11 +12,19 @@ exports.listResources = async (req, res, next) => {
 
 exports.createResource = async (req, res, next) => {
   try {
-    const { name, type, location, description, assignedFacultyId, capacity } = req.body;
+    const { name, type, location, description, assignedFacultyId, capacity, requiresClubApproval } = req.body;
     if (!assignedFacultyId) {
       return res.status(400).json({ message: 'assignedFacultyId is required' });
     }
-    const resource = await Resource.create({ name, type, location, description, assignedFacultyId, capacity });
+    const resource = await Resource.create({
+      name,
+      type,
+      location,
+      description,
+      assignedFacultyId,
+      capacity,
+      requiresClubApproval: Boolean(requiresClubApproval)
+    });
     await logAction({
       actorId: req.user.id,
       action: 'resource_create',
@@ -32,7 +40,11 @@ exports.createResource = async (req, res, next) => {
 exports.updateResource = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const resource = await Resource.findByIdAndUpdate(id, req.body, { new: true });
+    const updates = { ...req.body };
+    if (Object.prototype.hasOwnProperty.call(req.body, 'requiresClubApproval')) {
+      updates.requiresClubApproval = Boolean(req.body.requiresClubApproval);
+    }
+    const resource = await Resource.findByIdAndUpdate(id, updates, { new: true });
     if (!resource) return res.status(404).json({ message: 'Resource not found' });
     await logAction({
       actorId: req.user.id,

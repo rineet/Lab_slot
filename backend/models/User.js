@@ -10,6 +10,27 @@ const userSchema = new mongoose.Schema(
       enum: ['Student', 'Faculty', 'Admin'],
       required: true
     },
+    facultyRole: {
+      type: String,
+      enum: ['NONE', 'CLUB_INCHARGE', 'HOD', 'ASSOCIATE_DEAN'],
+      default: 'NONE'
+    },
+    rollNumber: {
+      type: String,
+      unique: true,
+      sparse: true,
+      required: function requiredRollNumber() {
+        return this.role === 'Student';
+      }
+    },
+    facultyId: {
+      type: String,
+      unique: true,
+      sparse: true,
+      required: function requiredFacultyId() {
+        return this.role === 'Faculty';
+      }
+    },
     isActive: { type: Boolean, default: true }
   },
   { timestamps: true }

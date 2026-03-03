@@ -14,6 +14,12 @@ const slotRequestSchema = new mongoose.Schema(
       enum: ['CREATED', 'PENDING', 'APPROVED', 'REJECTED', 'CANCELLED', 'EXPIRED'],
       default: 'CREATED'
     },
+    requiresClubApproval: { type: Boolean, default: false },
+    approvalStage: {
+      type: String,
+      enum: ['FACULTY', 'CLUB_INCHARGE', 'HOD', 'ASSOCIATE_DEAN', 'FINAL'],
+      default: 'FACULTY'
+    },
     decisionReason: { type: String, default: '' },
     createdAt: { type: Date, default: Date.now }
   },

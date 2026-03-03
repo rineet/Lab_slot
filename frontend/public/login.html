@@ -13,16 +13,13 @@
   <div class="shell auth-wrapper">
     <div class="auth-card">
       <div style="text-align:center; margin-bottom: 24px;">
-        <div
-          style="width: 48px; height: 48px; background: #eef2ff; color: var(--primary); border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 16px;">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
-            style="width: 24px; height: 24px;">
-            <path stroke-linecap="round" stroke-linejoin="round"
-              d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
+        <div style="width: 56px; height: 56px; background: linear-gradient(135deg, var(--primary-light), #e0f2fe); color: var(--primary); border-radius: 16px; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 20px; box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2);">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" style="width: 28px; height: 28px;">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
           </svg>
         </div>
-        <h2>Member Login</h2>
-        <p class="subtitle">Enter your credentials to access the lab booking system</p>
+        <h2>Lab Booking Portal</h2>
+        <p class="subtitle">Secure login to your account</p>
       </div>
 
       <form id="login-form">
@@ -34,25 +31,12 @@
           <label>Password</label>
           <input name="password" type="password" required placeholder="••••••••" />
         </div>
-        <button type="submit">Sign In</button>
+        <button type="submit" style="margin-bottom: 16px;">Sign In</button>
       </form>
-      <div id="login-msg" style="margin-top: 16px; text-align: center; font-size: 0.875rem;"></div>
+      <div id="login-msg" style="margin-top: 12px; text-align: center; font-size: 0.875rem;"></div>
 
-      <div class="demo-creds">
-        <h5>Demo Credentials:</h5>
-        <p><strong>Student:</strong> alice@university.edu</p>
-        <p><strong>Faculty:</strong> smith@university.edu</p>
-        <p><strong>Admin:</strong> admin@university.edu</p>
-        <p style="font-size: 0.75rem; margin-top: 8px; color: #0369a1;">Password for all: <strong>123456</strong></p>
-      </div>
-
-      <div style="margin-top: 24px; text-align: center; font-size: 0.875rem; color: var(--text-muted);">
-        Don't have an account? <a href="/register.html"
-          style="color: var(--primary); font-weight: 600; text-decoration: none;">Register here</a>
-      </div>
-      <div style="margin-top: 12px; text-align: center;">
-        <a href="/index.html" style="font-size: 0.875rem; color: var(--text-muted); text-decoration: none;">&larr; Back
-          to Home</a>
+      <div style="margin-top: 24px; text-align: center;">
+        <a href="/index.html" style="font-size: 0.875rem; color: var(--text-muted); text-decoration: none;">← Back to Home</a>
       </div>
     </div>
   </div>
