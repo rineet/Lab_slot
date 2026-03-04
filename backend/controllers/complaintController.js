@@ -71,6 +71,11 @@ exports.updateComplaintStatus = async (req, res, next) => {
     if (!complaint) {
       return res.status(404).json({ message: 'Complaint not found' });
     }
+    // once complaint is closed it cannot be changed
+    if (complaint.status === 'CLOSED') {
+      return res.status(400).json({ message: 'Closed complaints cannot be updated' });
+    }
+
     if (status) {
       complaint.status = status;
     }

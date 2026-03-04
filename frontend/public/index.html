@@ -5,160 +5,284 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Research Lab Slot Booking</title>
+
   <link rel="stylesheet" href="/css/styles.css" />
   <script defer src="/js/app.js"></script>
 </head>
 
 <body>
+
   <div class="shell">
+
     <header>
+
       <h2>
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
           stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round"
             d="M14.25 9.75L16.5 12l-2.25 2.25m-4.5 0L7.5 12l2.25-2.25M6 20.25h12A2.25 2.25 0 0020.25 18V6A2.25 2.25 0 0018 3.75H6A2.25 2.25 0 003.75 6v12A2.25 2.25 0 006 20.25z" />
         </svg>
+
         Lab Booking System
       </h2>
+
       <div id="auth-actions">
         <span id="user-badge" class="muted"></span>
         <button id="logout-btn" style="display:none">Logout</button>
       </div>
+
     </header>
 
+
     <section class="hero">
-      <div style="margin-bottom: 16px;">
-        <span style="display: inline-block; background: var(--primary-light); color: var(--primary); padding: 8px 16px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase;">Welcome to Lab Management</span>
+
+      <div style="margin-bottom:16px;">
+        <span
+          style="display:inline-block;background:var(--primary-light);color:var(--primary);padding:8px 16px;border-radius:20px;font-size:0.85rem;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;">
+          Welcome to Lab Management
+        </span>
       </div>
-      <h1>Research Lab Slot Booking</h1>
-      <p>Streamline your laboratory and equipment reservations with our modern, efficient booking system designed for
-        university research. Easy scheduling, smart allocation, and real-time availability.</p>
-      
+
+
+      <h1 class="gradient-text">Research Lab Slot Booking</h1>
+
+      <p>
+        Streamline laboratory and equipment reservations with our modern booking system designed for university
+        research.
+        Plan experiments efficiently with real-time availability and smart scheduling.
+      </p>
+
+
+      <div class="hero-actions"></div>
+
+
+
+      <div class="stats">
+
+        <div class="stat">
+          <h2>50+</h2>
+          <p>Research Labs</p>
+        </div>
+
+        <div class="stat">
+          <h2>1200+</h2>
+          <p>Bookings Completed</p>
+        </div>
+
+        <div class="stat">
+          <h2>500+</h2>
+          <p>Active Researchers</p>
+        </div>
+
+      </div>
+
+
+
       <div class="login-boxes-grid">
-        <!-- Student Login Box -->
+
+
         <div class="login-box student-box" onclick="window.location.href='/login.html'">
+
           <div class="login-icon">
+
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" style="width: 48px; height: 48px;">
               <path stroke-linecap="round" stroke-linejoin="round" d="M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.697 50.697 0 0112 13.489a50.702 50.702 0 017.74-3.342M6.75 15a.75.75 0 100-1.5.75.75 0 000 1.5zm0 0v-3.675A55.378 55.378 0 0112 8.443m-7.007 11.55A5.981 5.981 0 006.75 15.75v-1.5" />
             </svg>
+
           </div>
-          <h3 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 12px; color: var(--text-main);">Student Login</h3>
-          <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 20px;">Book labs, track requests, and manage your research schedule</p>
+
+          <h3>Student Login</h3>
+
+          <p>
+            Book laboratories, submit research requests, and track experiment schedules.
+          </p>
+
           <div class="login-arrow">→</div>
+
         </div>
 
-        <!-- Faculty Login Box -->
+
+
         <div class="login-box faculty-box" onclick="window.location.href='/login.html'">
+
           <div class="login-icon">
+
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" style="width: 48px; height: 48px;">
               <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 01-1.043 3.296 3.745 3.745 0 01-3.296 1.043A3.745 3.745 0 0112 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 01-3.296-1.043 3.745 3.745 0 01-1.043-3.296A3.745 3.745 0 013 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 011.043-3.296 3.746 3.746 0 013.296-1.043A3.746 3.746 0 0112 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 013.296 1.043 3.746 3.746 0 011.043 3.296A3.745 3.745 0 0121 12z" />
             </svg>
+
           </div>
-          <h3 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 12px; color: var(--text-main);">Faculty Login</h3>
-          <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 20px;">Review requests, manage resources, and oversee lab usage</p>
+
+          <h3>Faculty Login</h3>
+
+          <p>
+            Approve booking requests, manage laboratory resources, and supervise research activities.
+          </p>
+
           <div class="login-arrow">→</div>
+
         </div>
 
-        <!-- Admin Login Box -->
+
+
         <div class="login-box admin-box" onclick="window.location.href='/login.html'">
+
           <div class="login-icon">
+
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" style="width: 48px; height: 48px;">
               <path stroke-linecap="round" stroke-linejoin="round" d="M10.343 3.94c.09-.542.56-.94 1.11-.94h1.093c.55 0 1.02.398 1.11.94l.149.894c.07.424.384.764.78.93.398.164.855.142 1.205-.108l.737-.527a1.125 1.125 0 011.45.12l.773.774c.39.389.44 1.002.12 1.45l-.527.737c-.25.35-.272.806-.107 1.204.165.397.505.71.93.78l.893.15c.543.09.94.56.94 1.109v1.094c0 .55-.397 1.02-.94 1.11l-.893.149c-.425.07-.765.383-.93.78-.165.398-.143.854.107 1.204l.527.738c.32.447.269 1.06-.12 1.45l-.774.773a1.125 1.125 0 01-1.449.12l-.738-.527c-.35-.25-.806-.272-1.203-.107-.397.165-.71.505-.781.929l-.149.894c-.09.542-.56.94-1.11.94h-1.094c-.55 0-1.019-.398-1.11-.94l-.148-.894c-.071-.424-.384-.764-.781-.93-.398-.164-.854-.142-1.204.108l-.738.527c-.447.32-1.06.269-1.45-.12l-.773-.774a1.125 1.125 0 01-.12-1.45l.527-.737c.25-.35.273-.806.108-1.204-.165-.397-.505-.71-.93-.78l-.894-.15c-.542-.09-.94-.56-.94-1.109v-1.094c0-.55.398-1.02.94-1.11l.894-.149c.424-.07.765-.383.93-.78.165-.398.143-.854-.107-1.204l-.527-.738a1.125 1.125 0 01.12-1.45l.773-.773a1.125 1.125 0 011.45-.12l.737.527c.35.25.807.272 1.204.107.397-.165.71-.505.78-.929l.15-.894z" />
               <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
             </svg>
+
           </div>
-          <h3 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 12px; color: var(--text-main);">Admin Login</h3>
-          <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 20px;">Configure system, manage users, and control policies</p>
+
+          <h3>Admin Login</h3>
+
+          <p>
+            Configure system settings, manage users, and control laboratory policies.
+          </p>
+
           <div class="login-arrow">→</div>
+
         </div>
+
       </div>
+
     </section>
 
+
+
     <h3 class="section-title">How It Works</h3>
+
     <div class="how-it-works">
+
+
       <div class="step-card">
+
         <div class="step-number">1</div>
-        <h4>Request</h4>
-        <p>Submit your lab/equipment booking request with purpose and duration.</p>
+
+        <h4>Submit Request</h4>
+
+        <p>
+          Choose your laboratory, equipment, and preferred time slot.
+        </p>
+
       </div>
+
+
+
       <div class="step-card">
+
         <div class="step-number">2</div>
-        <h4>Approval</h4>
-        <p>Faculty reviews and approves your request based on availability.</p>
+
+        <h4>Faculty Approval</h4>
+
+        <p>
+          Your booking request is reviewed and approved by faculty.
+        </p>
+
       </div>
+
+
+
       <div class="step-card">
+
         <div class="step-number">3</div>
-        <h4>Usage</h4>
-        <p>Access the lab at your scheduled time and conduct your research.</p>
+
+        <h4>Start Research</h4>
+
+        <p>
+          Access the laboratory at the scheduled time and conduct your research.
+        </p>
+
       </div>
+
     </div>
+
+
+
+    <h3 class="section-title">Key Features</h3>
 
     <div class="features-grid">
+
+
       <div class="feature-item">
-        <svg class="feature-icon" fill="currentColor" viewBox="0 0 20 20">
-          <path fill-rule="evenodd"
-            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-            clip-rule="evenodd"></path>
-        </svg>
-        Real-time availability tracking
+        <span class="feature-icon">✔</span>
+        Real-time laboratory availability
       </div>
+
       <div class="feature-item">
-        <svg class="feature-icon" fill="currentColor" viewBox="0 0 20 20">
-          <path fill-rule="evenodd"
-            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-            clip-rule="evenodd"></path>
-        </svg>
+        <span class="feature-icon">✔</span>
         Automated approval workflow
       </div>
+
       <div class="feature-item">
-        <svg class="feature-icon" fill="currentColor" viewBox="0 0 20 20">
-          <path fill-rule="evenodd"
-            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-            clip-rule="evenodd"></path>
-        </svg>
-        Calendar integration
+        <span class="feature-icon">✔</span>
+        Equipment reservation system
       </div>
+
       <div class="feature-item">
-        <svg class="feature-icon" fill="currentColor" viewBox="0 0 20 20">
-          <path fill-rule="evenodd"
-            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-            clip-rule="evenodd"></path>
-        </svg>
+        <span class="feature-icon">✔</span>
+        Smart scheduling
+      </div>
+
+      <div class="feature-item">
+        <span class="feature-icon">✔</span>
+        Usage analytics & reports
+      </div>
+
+      <div class="feature-item">
+        <span class="feature-icon">✔</span>
         Fair resource allocation
       </div>
-      <div class="feature-item">
-        <svg class="feature-icon" fill="currentColor" viewBox="0 0 20 20">
-          <path fill-rule="evenodd"
-            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-            clip-rule="evenodd"></path>
-        </svg>
-        Usage analytics and reports
-      </div>
-      <div class="feature-item">
-        <svg class="feature-icon" fill="currentColor" viewBox="0 0 20 20">
-          <path fill-rule="evenodd"
-            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-            clip-rule="evenodd"></path>
-        </svg>
-        Equipment management
-      </div>
+
     </div>
 
+
+
     <footer>
-      &copy; 2026 University Lab Booking System. All rights reserved.
+
+      © 2026 University Lab Booking System. All rights reserved.
+
     </footer>
+
+
   </div>
+
+
+
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const user = app.getUser();
+
+    document.addEventListener('DOMContentLoaded', async () => {
+
+      const user = await app.getUser();
+
       if (user) {
+
         document.getElementById('logout-btn').style.display = 'inline-flex';
-        // Show dashboard link based on role
+
+        const grid = document.querySelector('.login-boxes-grid');
+
+        if (grid) grid.style.display = 'none';
+
         const heroActions = document.querySelector('.hero-actions');
-        heroActions.innerHTML = `<button onclick="window.location.href='/${user.role.toLowerCase()}-dashboard.html'">Go to Dashboard</button>`;
+
+        if (heroActions) {
+
+          heroActions.innerHTML =
+            `<button onclick="window.location.href='/${user.role.toLowerCase()}-dashboard.html'">
+Go to Dashboard
+</button>`;
+
+        }
+
       }
+
     });
+
   </script>
+
+
 </body>
 
 </html>

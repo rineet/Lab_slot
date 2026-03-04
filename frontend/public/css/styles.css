@@ -48,6 +48,7 @@ a:focus-visible {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 24px;
+  width: 100%;
 }
 
 /* Header & Nav */
@@ -55,10 +56,20 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 24px 0;
-  margin-bottom: 32px;
-  border-bottom: 1px solid var(--border);
-  background: linear-gradient(135deg, rgba(79, 70, 229, 0.02) 0%, rgba(99, 102, 241, 0.02) 100%);
+  padding: 18px 28px;
+  margin-bottom: 40px;
+
+  position: sticky;
+  top: 0;
+  z-index: 100;
+
+  backdrop-filter: blur(10px);
+  background: rgba(255,255,255,0.7);
+
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.5);
+
+  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
 }
 
 header h2 {
@@ -132,12 +143,41 @@ nav a.active::after {
 }
 
 /* Hero Section Enhancement */
+
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.blob {
+  position: absolute;
+  width: 400px;
+  height: 400px;
+  border-radius: 50%;
+  filter: blur(120px);
+  opacity: 0.4;
+}
+
+.blob1 {
+  background: #6366f1;
+  top: -100px;
+  left: -120px;
+}
+
+.blob2 {
+  background: #a855f7;
+  bottom: -120px;
+  right: -100px;
+}
+
 .hero {
   text-align: center;
   padding: 100px 40px 80px;
   margin: 0;
   background: linear-gradient(135deg, rgba(79, 70, 229, 0.05) 0%, rgba(99, 102, 241, 0.05) 100%);
-  border-radius: 0;
+  border-radius: 20px;
   position: relative;
   overflow: hidden;
 }
@@ -155,14 +195,21 @@ nav a.active::after {
 }
 
 .hero h1 {
-  font-size: 3.5rem;
-  font-weight: 800;
-  color: #1e1b4b;
-  margin-bottom: 16px;
-  letter-spacing: -0.025em;
-  line-height: 1.1;
-  position: relative;
-  z-index: 1;
+  font-size: 4rem;
+  font-weight: 900;
+
+  background: linear-gradient(
+    135deg,
+    #4f46e5,
+    #7c3aed,
+    #06b6d4
+  );
+
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  margin-bottom: 18px;
+  animation: fadeUp 0.8s ease;
 }
 
 .hero p {
@@ -172,6 +219,7 @@ nav a.active::after {
   line-height: 1.6;
   position: relative;
   z-index: 1;
+  animation: fadeUp 1s ease;
 }
 
 .hero-actions {
@@ -183,6 +231,17 @@ nav a.active::after {
   z-index: 1;
 }
 
+@keyframes fadeUp {
+  from {
+    opacity:0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity:1;
+    transform: translateY(0);
+  }
+}
+
 /* Login Boxes */
 .login-boxes-grid {
   display: grid;
@@ -190,6 +249,7 @@ nav a.active::after {
   gap: 24px;
   margin-top: 48px;
   padding: 0 40px;
+  animation: fadeUp 1.2s ease;
 }
 
 @media (max-width: 992px) {
@@ -232,9 +292,12 @@ nav a.active::after {
 }
 
 .login-box:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
-  border-color: var(--primary);
+  transform: translateY(-10px) scale(1.02);
+
+  box-shadow:
+    0 20px 40px rgba(0,0,0,0.12),
+    0 0 0 2px rgba(79,70,229,0.2),
+    0 0 40px rgba(79,70,229,0.15);
 }
 
 .login-icon {
@@ -278,6 +341,29 @@ nav a.active::after {
 .login-box:hover .login-arrow {
   opacity: 1;
   transform: translateX(0);
+}
+
+/* statistics section */
+.stats {
+  display: flex;
+  justify-content: center;
+  gap: 60px;
+  margin-top: 40px;
+}
+
+.stat {
+  text-align: center;
+}
+
+.stat h2 {
+  font-size: 2.2rem;
+  color: var(--primary);
+  margin-bottom: 4px;
+}
+
+.stat p {
+  color: var(--text-muted);
+  font-size: 0.9rem;
 }
 
 /* Specific box styling */
@@ -435,6 +521,108 @@ nav a.active::after {
   box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 0 0 1px rgba(79, 70, 229, 0.05);
   backdrop-filter: blur(10px);
   animation: slideUp 0.5s ease-out;
+}
+
+/* =========================
+   FullCalendar UI Fixes
+   ========================= */
+
+/* Prevent global button styles affecting calendar buttons */
+.fc .fc-button {
+  width: auto;
+  padding: 6px 12px;
+  font-size: 0.85rem;
+  border-radius: 8px;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+.fc .fc-button-group {
+  display: flex;
+  gap: 10px;
+}
+
+.fc .fc-toolbar-chunk {
+  display: flex;
+  gap: 10px;
+}
+
+/* Disable transform animation on hover */
+.fc .fc-button:hover {
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+/* Remove focus ring expansion */
+.fc .fc-button:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* Improve toolbar title */
+.fc .fc-toolbar-title {
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+
+/* Improve calendar spacing */
+#calendar {
+  min-height: 650px;
+}
+
+/* Resource selector layout */
+.resource-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.resource-select {
+  max-width: 320px;
+}
+
+/* =========================
+   Fix FullCalendar Buttons
+   ========================= */
+
+.fc button {
+  width: auto !important;
+  padding: 6px 12px !important;
+  font-size: 0.85rem !important;
+  border-radius: 8px !important;
+
+  transform: none !important;
+  box-shadow: none !important;
+  overflow: hidden !important;
+}
+
+/* Remove ripple animation from global button */
+.fc button::before {
+  display: none !important;
+}
+
+/* Disable hover animation */
+.fc button:hover {
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+/* Disable focus animation */
+.fc button:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* Disable active animation */
+.fc button:active {
+  transform: none !important;
+}
+
+.faculty-complaints-list, .all-complaints-list, .complaint-actions{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 @keyframes slideUp {
@@ -735,13 +923,10 @@ button:disabled {
 }
 
 footer {
+  margin-top: 100px;
+  margin-bottom: 20px;
   text-align: center;
-  padding: 48px 0;
-  border-top: 1px solid var(--border);
-  color: var(--text-muted);
-  font-size: 0.875rem;
-  background: linear-gradient(135deg, rgba(79, 70, 229, 0.02) 0%, rgba(99, 102, 241, 0.02) 100%);
-  transition: all 0.3s ease;
+  font-size: 0.9rem;
 }
 
 @media (max-width: 768px) {
@@ -760,17 +945,21 @@ footer {
   display: grid;
   grid-template-columns: 1fr 350px;
   gap: 24px;
-  margin-bottom: 40px;
+  height: calc(100vh - 180px); /* adjust depending on header/footer */
+}
+
+.layout-two-col aside {
+  overflow-y: auto;
+  padding-right: 8px;
+  scrollbar-width: thin;
+}
+
+.layout-two-col aside .card{
+  margin-top: 3px;
 }
 
 .layout-two-col section {
   min-width: 0;
-}
-
-.layout-two-col aside {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
 }
 
 /* Grid */

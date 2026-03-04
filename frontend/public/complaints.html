@@ -11,7 +11,9 @@
     document.addEventListener('DOMContentLoaded', async () => {
       const user = await app.requireAuth(['Student', 'Faculty', 'Admin']);
       const userRole = user?.role || 'Student';
-      
+
+      // replace nav with role menu
+      if (user) document.querySelector('nav').innerHTML = app.buildNav(user.role);
       app.highlightActiveNav();
       
       // Show appropriate view based on user role
@@ -43,7 +45,13 @@
 
     <nav>
       <a href="/index.html">Home</a>
-      <a href="#" onclick="history.back(); return false;">&larr; Back</a>
+      <a href="/student-dashboard.html">Dashboard</a>
+      <a href="/request.html">New Request</a>
+      <a href="/calendar.html">Calendar</a>
+      <a href="/history.html">Bookings History</a>
+      <a href="/attendance.html">My Attendance</a>
+      <a href="/marks.html">My Marks</a>
+      <a href="/complaints.html">Complaints</a>
     </nav>
 
     <!-- Student View -->

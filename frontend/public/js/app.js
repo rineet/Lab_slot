@@ -44,6 +44,12 @@ async function requireAuth(roles) {
   return user;
 }
 
+// return currently cached user or fetch from server if not loaded
+async function getUser() {
+  if (currentUser) return currentUser;
+  return await fetchSessionUser();
+}
+
 async function handleChangePasswordForm(formId = 'change-password-form', msgId = 'change-password-msg') {
   const form = document.getElementById(formId);
   if (!form) return;
@@ -757,23 +763,33 @@ async function loadFacultyComplaints(targetId) {
       .map((c) => {
         const studentName = c.raisedBy?.name || 'Unknown';
         const venueName = c.venueId?.name || c.venueId?.location || 'Unknown resource';
-        return `<div class="card">
-          <div><strong>${c.category}</strong></div>
-          <div class="muted">Resource: ${venueName}</div>
-          <div class="muted">Raised by: ${studentName}</div>
-          <div class="muted">${c.description}</div>
-          <div class="muted">Status: <strong>${c.status}</strong></div>
-          <div style="margin-top: 12px;">
-            <select id="status-${c._id}" style="margin-right: 8px;">
-              <option value="">-- Update Status --</option>
-              <option value="ASSIGNED">ASSIGNED</option>
-              <option value="IN_PROGRESS">IN_PROGRESS</option>
-              <option value="RESOLVED">RESOLVED</option>
-              <option value="CLOSED">CLOSED</option>
-            </select>
-            <button onclick="app.updateComplaintStatus('${c._id}')">Update</button>
-          </div>
-        </div>`;
+        // if already closed, don't render controls
+          if (c.status === 'CLOSED') {
+            return `<div class="card">
+              <div><strong>${c.category}</strong></div>
+              <div class="muted">Resource: ${venueName}</div>
+              <div class="muted">Raised by: ${studentName}</div>
+              <div class="muted">${c.description}</div>
+              <div class="muted">Status: <strong>${c.status}</strong></div>
+            </div>`;
+          }
+          return `<div class="card">
+            <div><strong>${c.category}</strong></div>
+            <div class="muted">Resource: ${venueName}</div>
+            <div class="muted">Raised by: ${studentName}</div>
+            <div class="muted">${c.description}</div>
+            <div class="muted">Status: <strong>${c.status}</strong></div>
+            <div class="complaint-actions" style="margin-top: 12px;">
+              <select id="status-${c._id}" style="margin-right: 8px;">
+                <option value="">-- Update Status --</option>
+                <option value="ASSIGNED">ASSIGNED</option>
+                <option value="IN_PROGRESS">IN_PROGRESS</option>
+                <option value="RESOLVED">RESOLVED</option>
+                <option value="CLOSED">CLOSED</option>
+              </select>
+              <button onclick="app.updateComplaintStatus('${c._id}')">Update</button>
+            </div>
+          </div>`;
       })
       .join('')}</div>`;
   } catch (err) {
@@ -795,6 +811,17 @@ async function loadAllComplaints(targetId) {
         const studentName = c.raisedBy?.name || 'Unknown';
         const venueName = c.venueId?.name || c.venueId?.location || 'Unknown resource';
         const assignedName = c.assignedTo?.name || 'Unassigned';
+        // skip controls if closed
+        if (c.status === 'CLOSED') {
+          return `<div class="card">
+            <div><strong>${c.category}</strong></div>
+            <div class="muted">Resource: ${venueName}</div>
+            <div class="muted">Raised by: ${studentName}</div>
+            <div class="muted">Assigned to: ${assignedName}</div>
+            <div class="muted">${c.description}</div>
+            <div class="muted">Status: <strong>${c.status}</strong></div>
+          </div>`;
+        }
         return `<div class="card">
           <div><strong>${c.category}</strong></div>
           <div class="muted">Resource: ${venueName}</div>
@@ -802,7 +829,7 @@ async function loadAllComplaints(targetId) {
           <div class="muted">Assigned to: ${assignedName}</div>
           <div class="muted">${c.description}</div>
           <div class="muted">Status: <strong>${c.status}</strong></div>
-          <div style="margin-top: 12px;">
+          <div class="complaint-actions" style="margin-top: 12px;">
             <select id="status-${c._id}" style="margin-right: 8px;">
               <option value="">-- Update Status --</option>
               <option value="OPEN">OPEN</option>
@@ -995,6 +1022,40 @@ function highlightActiveNav() {
   });
 }
 
+// build navigation markup according to user role
+function buildNav(role) {
+  const items = [{ href: '/index.html', text: 'Home' }];
+  if (role === 'Student') {
+    items.push(
+      { href: '/student-dashboard.html', text: 'Dashboard' },
+      { href: '/request.html', text: 'New Request' },
+      { href: '/calendar.html', text: 'Calendar' },
+      { href: '/history.html', text: 'Bookings History' },
+      { href: '/attendance.html', text: 'My Attendance' },
+      { href: '/marks.html', text: 'My Marks' },
+      { href: '/complaints.html', text: 'Complaints' }
+    );
+  } else if (role === 'Faculty') {
+    items.push(
+      { href: '/faculty-dashboard.html', text: 'Dashboard' },
+      { href: '/approvals.html', text: 'Approvals' },
+      { href: '/calendar.html', text: 'Resource Calendar' },
+      { href: '/complaints.html', text: 'Complaints' }
+    );
+  } else if (role === 'Admin') {
+    items.push(
+      { href: '/admin-dashboard.html', text: 'Dashboard' },
+      { href: '/manage-resources.html', text: 'Resources' },
+      { href: '/manage-users.html', text: 'Users' },
+      { href: '/manage-hierarchy.html', text: 'Hierarchy' },
+      { href: '/calendar.html', text: 'Calendar' },
+      { href: '/analytics.html', text: 'Analytics' },
+      { href: '/complaints.html', text: 'Complaints' }
+    );
+  }
+  return items.map(i => `<a href="${i.href}">${i.text}</a>`).join('');
+}
+
 window.app = {
   requireAuth,
   handleChangePasswordForm,
@@ -1030,6 +1091,8 @@ window.app = {
   handleMarksPublishForm,
   handleBulkStudentUploadForm,
   handleBulkFacultyUploadForm,
-  highlightActiveNav
+  highlightActiveNav,
+  buildNav,
+  getUser
 };
 
