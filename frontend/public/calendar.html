@@ -23,6 +23,13 @@
           right: 'dayGridMonth,timeGridWeek,timeGridDay'
         },
         events: [],
+      /* add a class when the status is cancelled/expired */
+      eventClassNames: (arg) => {
+        const s = (arg.event.extendedProps.status || '').toString().toLowerCase();
+        if (s === 'canceled' || s === 'cancelled' || s === 'expired' || s === 'rejected') {
+          return ['fc-event-cancelled'];
+        }
+      },
         eventClick: (info) => {
           alert(
             'Lab: ' + info.event.title + '\n' +
@@ -60,6 +67,13 @@
     .fc .fc-toolbar-title {
       font-size: 1.25rem;
       font-weight: 700;
+    }
+
+    /* cancelled / expired bookings are shown with a line‑through */
+    .fc .fc-event.fc-event-cancelled .fc-event-title,
+    .fc .fc-event.fc-event-cancelled .fc-event-time {
+      text-decoration: line-through;
+      opacity: 0.6;          /* optional, to fade them out slightly */
     }
   </style>
 </head>
