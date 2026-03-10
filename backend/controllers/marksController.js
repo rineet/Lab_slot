@@ -1,4 +1,4 @@
-const xlsx = require('xlsx');
+const { parseFirstSheetBuffer } = require('../utils/excelParser');
 const Marks = require('../models/Marks');
 
 // Faculty: upload marks via Excel
@@ -8,9 +8,7 @@ exports.uploadMarks = async (req, res, next) => {
     if (!req.file) {
       return res.status(400).json({ message: 'No file uploaded' });
     }
-    const workbook = xlsx.read(req.file.buffer, { type: 'buffer' });
-    const sheet = workbook.Sheets[workbook.SheetNames[0]];
-    const rows = xlsx.utils.sheet_to_json(sheet, { defval: null });
+    const rows = await parseFirstSheetBuffer(req.file.buffer);
 
     const results = { inserted: 0, skipped: 0, errors: [] };
 

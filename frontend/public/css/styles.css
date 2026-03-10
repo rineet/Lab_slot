@@ -222,6 +222,71 @@ nav a.active::after {
   animation: fadeUp 1s ease;
 }
 
+.auth-actions-inline {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.notification-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.notification-count {
+  min-width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  background: var(--danger);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 6px;
+}
+
+.notification-panel {
+  margin: 0 auto 18px;
+  max-width: 780px;
+  text-align: left;
+  padding: 16px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: #ffffff;
+  box-shadow: var(--shadow-md);
+  position: relative;
+  z-index: 1;
+}
+
+.notification-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.notification-header-row h4 {
+  margin: 0;
+}
+
+.notification-list {
+  list-style: none;
+  margin: 10px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+
+.notification-list li {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px;
+  background: #f8fafc;
+}
+
 .hero-actions {
   display: flex;
   justify-content: center;
@@ -1231,6 +1296,43 @@ tr:last-child td {
 
 .text-muted {
   color: var(--text-muted);
+}
+
+/* Document approval module */
+.form-grid {
+  display: grid;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+
+.form-grid.two-cols {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.card label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+
+.card input,
+.card select,
+.card textarea {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 12px;
+  background: #fff;
+}
+
+.card textarea {
+  resize: vertical;
+}
+
+@media (max-width: 900px) {
+  .form-grid.two-cols {
+    grid-template-columns: 1fr;
+  }
 }
 
 .text-primary {

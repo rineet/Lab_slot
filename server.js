@@ -20,6 +20,7 @@ const attendanceRoutes = require('./backend/routes/attendanceRoutes');
 const marksRoutes = require('./backend/routes/marksRoutes');
 const complaintRoutes = require('./backend/routes/complaintRoutes');
 const analyticsRoutes = require('./backend/routes/analyticsRoutes');
+const requestRoutes = require('./backend/routes/requestRoutes');
 
 const app = express();
 
@@ -42,10 +43,12 @@ app.use('/api/attendance', attendanceRoutes);
 app.use('/api/marks', marksRoutes);
 app.use('/api/complaints', complaintRoutes);
 app.use('/api/analytics', analyticsRoutes);
+app.use('/api/document-requests', requestRoutes);
 
 // Serve static frontend
 const publicPath = path.join(__dirname, 'frontend', 'public');
 app.use(express.static(publicPath));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Fallback to index.html for root
 app.get('/', (req, res) => {

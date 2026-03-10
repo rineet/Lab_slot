@@ -1,5 +1,5 @@
 const bcrypt = require('bcrypt');
-const xlsx = require('xlsx');
+const { parseFirstSheetBuffer } = require('../utils/excelParser');
 const User = require('../models/User');
 const Policy = require('../models/Policy');
 const Attendance = require('../models/Attendance');
@@ -130,9 +130,7 @@ exports.bulkCreateStudents = async (req, res, next) => {
     if (!req.file) {
       return res.status(400).json({ message: 'No file uploaded' });
     }
-    const workbook = xlsx.read(req.file.buffer, { type: 'buffer' });
-    const sheet = workbook.Sheets[workbook.SheetNames[0]];
-    const rows = xlsx.utils.sheet_to_json(sheet, { defval: null });
+    const rows = await parseFirstSheetBuffer(req.file.buffer);
 
     const results = { created: 0, skipped: 0, errors: [] };
 
@@ -195,9 +193,7 @@ exports.bulkCreateFaculty = async (req, res, next) => {
     if (!req.file) {
       return res.status(400).json({ message: 'No file uploaded' });
     }
-    const workbook = xlsx.read(req.file.buffer, { type: 'buffer' });
-    const sheet = workbook.Sheets[workbook.SheetNames[0]];
-    const rows = xlsx.utils.sheet_to_json(sheet, { defval: null });
+    const rows = await parseFirstSheetBuffer(req.file.buffer);
 
     const results = { created: 0, skipped: 0, errors: [] };
 

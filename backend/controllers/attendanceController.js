@@ -1,4 +1,4 @@
-const xlsx = require('xlsx');
+const { parseFirstSheetBuffer } = require('../utils/excelParser');
 const Attendance = require('../models/Attendance');
 const User = require('../models/User');
 
@@ -21,9 +21,7 @@ exports.uploadAttendance = async (req, res, next) => {
     if (defaultTotal !== null && (Number.isNaN(defaultTotal) || defaultTotal <= 0)) {
       return res.status(400).json({ message: 'totalClasses must be a positive number' });
     }
-    const workbook = xlsx.read(req.file.buffer, { type: 'buffer' });
-    const sheet = workbook.Sheets[workbook.SheetNames[0]];
-    const rows = xlsx.utils.sheet_to_json(sheet, { defval: null });
+    const rows = await parseFirstSheetBuffer(req.file.buffer);
 
     const results = { inserted: 0, updated: 0, skipped: 0, errors: [] };
 

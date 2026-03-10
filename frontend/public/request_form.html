@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document Request Form</title>
+  <link rel="stylesheet" href="/css/styles.css" />
+</head>
+<body>
+  <div class="shell">
+    <header>
+      <h2>Document Approval Request</h2>
+      <div>
+        <span id="user-badge" class="muted"></span>
+        <button id="logout-btn" class="btn btn-secondary">Logout</button>
+      </div>
+    </header>
+
+    <nav>
+      <a href="/student-dashboard.html">Student Dashboard</a>
+      <a href="/request_form.html" class="active">New Request</a>
+      <a href="/student_request_dashboard.html">My Requests</a>
+    </nav>
+
+    <section class="card">
+      <h3>Submit New Approval Request</h3>
+      <form id="request-form" enctype="multipart/form-data">
+        <div class="form-grid two-cols">
+          <div>
+            <label for="studentName">Student Name</label>
+            <input id="studentName" name="name" type="text" placeholder="Auto-filled from login" />
+          </div>
+          <div>
+            <label for="to">To (Professor/Admin)</label>
+            <select id="to" name="to" required></select>
+          </div>
+          <div>
+            <label for="cc">CC (optional)</label>
+            <select id="cc" name="cc" multiple></select>
+          </div>
+          <div>
+            <label for="bcc">BCC (optional)</label>
+            <select id="bcc" name="bcc" multiple></select>
+          </div>
+          <div>
+            <label for="subject">Subject</label>
+            <input id="subject" name="subject" type="text" required />
+          </div>
+        </div>
+
+        <label for="shortMessage">Short Message</label>
+        <textarea id="shortMessage" name="shortMessage" rows="3" placeholder="Optional note for recipient"></textarea>
+
+        <label for="document">Upload PDF Document</label>
+        <input id="document" name="document" type="file" accept="application/pdf,.pdf" required />
+
+        <button type="submit" class="btn btn-primary">Submit Request</button>
+      </form>
+      <p id="request-form-msg" class="muted"></p>
+    </section>
+  </div>
+
+  <script src="/js/app.js"></script>
+  <script src="/js/document-approval.js"></script>
+</body>
+</html>
