@@ -612,6 +612,8 @@ async function handleAttendanceUploadForm() {
     }
     const fd = new FormData();
     fd.append('totalClasses', totalClasses);
+    fd.append("month", );
+    fd.append("subjectCode");
     fd.append('file', fileInput.files[0]);
     try {
       const res = await fetch(apiBase + '/api/attendance/upload', {
