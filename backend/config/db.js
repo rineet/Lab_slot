@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const connectDB = async () => {
-  const uri = process.env.MONGO_URI || process.env.MongoDB_URI;
+  const uri = process.env.MONGO_URI
   if (!uri) {
     console.error('MongoDB connection error: MONGO_URI is not set');
     process.exit(1);
@@ -18,4 +18,3 @@ const connectDB = async () => {
 };
 
 module.exports = connectDB;
-

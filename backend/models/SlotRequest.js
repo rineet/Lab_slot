@@ -27,4 +27,3 @@ const slotRequestSchema = new mongoose.Schema(
 );
 
 module.exports = mongoose.model('SlotRequest', slotRequestSchema);
-
