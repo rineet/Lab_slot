@@ -581,8 +581,10 @@ async function loadFacultyPending(targetId) {
           <div class="muted">${new Date(s.startTime).toLocaleString()} → ${new Date(s.endTime).toLocaleString()}</div>
           <div class="muted">Student: ${s.studentId?.name || s.studentId}</div>
           <div class="muted">Approval stage: ${stageLabel(s.approvalStage)}</div>
-          <button onclick="app.respondSlot('${s._id}', true)">Approve</button>
-          <button onclick="app.respondSlot('${s._id}', false)">Reject</button>
+          <div style="display:flex; gap:10px; margin-top:10px;">
+            <button onclick="app.respondSlot('${s._id}', true)">Approve</button>
+            <button onclick="app.respondSlot('${s._id}', false)">Reject</button>
+          </div>
         </div>`
       )
       .join('');
@@ -1095,4 +1097,3 @@ window.app = {
   buildNav,
   getUser
 };
-

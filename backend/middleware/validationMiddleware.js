@@ -17,4 +17,3 @@ const validationMiddleware = (validators = []) => {
 };
 
 module.exports = validationMiddleware;
-
