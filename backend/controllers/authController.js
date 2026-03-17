@@ -9,12 +9,22 @@ const JWT_EXPIRES_IN = '2h';
 const signToken = (user) =>
   jwt.sign({ id: user._id, role: user.role }, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN });
 
-const cookieOptions = () => ({
-  httpOnly: true,
-  sameSite: 'lax',
-  secure: process.env.NODE_ENV === 'production',
-  maxAge: 2 * 60 * 60 * 1000
-});
+const parseBoolean = (value, fallback) => {
+  if (value === undefined) return fallback;
+  return String(value).toLowerCase() === 'true';
+};
+
+const cookieOptions = () => {
+  const sameSite = (process.env.COOKIE_SAME_SITE || (process.env.NODE_ENV === 'production' ? 'none' : 'lax')).toLowerCase();
+  const secure = parseBoolean(process.env.COOKIE_SECURE, process.env.NODE_ENV === 'production' || sameSite === 'none');
+
+  return {
+    httpOnly: true,
+    sameSite,
+    secure,
+    maxAge: 2 * 60 * 60 * 1000
+  };
+};
 
 exports.register = async (req, res, next) => {
   try {
@@ -80,7 +90,7 @@ exports.login = async (req, res, next) => {
 
 exports.logout = async (req, res, next) => {
   try {
-    res.clearCookie('token');
+    res.clearCookie('token', cookieOptions());
     res.json({ message: 'Logged out' });
   } catch (err) {
     next(err);
