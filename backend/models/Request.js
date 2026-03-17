@@ -41,7 +41,24 @@ const requestSchema = new mongoose.Schema(
     },
     documentPath: {
       type: String,
-      required: true
+      default: ''
+    },
+    documentName: {
+      type: String,
+      default: 'document.pdf',
+      trim: true
+    },
+    documentMimeType: {
+      type: String,
+      default: 'application/pdf'
+    },
+    documentSize: {
+      type: Number,
+      default: 0,
+      min: 0
+    },
+    documentData: {
+      type: Buffer
     },
     approvalType: {
       type: String,
@@ -68,5 +85,11 @@ const requestSchema = new mongoose.Schema(
     timestamps: true
   }
 );
+
+requestSchema.index({ studentId: 1, createdAt: -1 });
+requestSchema.index({ to: 1, createdAt: -1 });
+requestSchema.index({ cc: 1, createdAt: -1 });
+requestSchema.index({ bcc: 1, createdAt: -1 });
+requestSchema.index({ forwardedTo: 1, createdAt: -1 });
 
 module.exports = mongoose.model('Request', requestSchema);
