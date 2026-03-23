@@ -26,9 +26,13 @@
         Lab Booking System
       </h2>
 
-      <div id="auth-actions">
+      <div id="auth-actions" class="auth-actions-inline">
         <span id="user-badge" class="muted"></span>
-        <button id="logout-btn" style="display:none">Logout</button>
+        <button id="notification-btn" class="secondary notification-btn" style="display:none" type="button">
+          Notifications
+          <span id="notification-count" class="notification-count" style="display:none">0</span>
+        </button>
+        <button id="logout-btn" class="secondary" style="display:none" type="button">Logout</button>
       </div>
 
     </header>
@@ -54,8 +58,6 @@
 
 
       <div class="hero-actions"></div>
-
-
 
       <div class="stats">
 
@@ -203,6 +205,14 @@
 
     <h3 class="section-title">Key Features</h3>
 
+    <div class="card" style="margin-bottom: 28px;">
+      <h3>Where To Check Document Approval System</h3>
+      <p class="muted">After login, open these pages directly:</p>
+      <p><a href="/request_form.html"><strong>Student submit form</strong></a></p>
+      <p><a href="/student_request_dashboard.html"><strong>Student status dashboard</strong></a></p>
+      <p><a href="/professor_dashboard.html"><strong>Professor/Admin inbox</strong></a></p>
+    </div>
+
     <div class="features-grid">
 
 
@@ -253,13 +263,30 @@
 
   <script>
 
+    async function fetchNotificationCountByRole(role) {
+      const endpoint = role === 'Student'
+        ? '/api/document-requests/student/my'
+        : '/api/document-requests/inbox';
+      const res = await fetch(endpoint, { credentials: 'include' });
+      if (!res.ok) return 0;
+      const items = await res.json();
+      if (role === 'Student') {
+        return items.filter((r) => r.status === 'Approved').length;
+      }
+      return items.filter((r) => r.status === 'Pending' || r.status === 'Forwarded').length;
+    }
+
     document.addEventListener('DOMContentLoaded', async () => {
 
       const user = await app.getUser();
 
+      const notificationBtn = document.getElementById('notification-btn');
+      const countEl = document.getElementById('notification-count');
+
       if (user) {
 
         document.getElementById('logout-btn').style.display = 'inline-flex';
+        if (notificationBtn) notificationBtn.style.display = 'inline-flex';
 
         const grid = document.querySelector('.login-boxes-grid');
 
@@ -274,6 +301,18 @@
 Go to Dashboard
 </button>`;
 
+        }
+
+        if (notificationBtn) {
+          notificationBtn.addEventListener('click', () => {
+            window.location.href = '/notifications.html';
+          });
+
+          const count = await fetchNotificationCountByRole(user.role);
+          if (countEl) {
+            countEl.textContent = String(count);
+            countEl.style.display = count > 0 ? 'inline-flex' : 'none';
+          }
         }
 
       }

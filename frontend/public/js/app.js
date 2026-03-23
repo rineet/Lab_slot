@@ -24,6 +24,27 @@ function showMessage(elId, text, isError = false) {
   }
 }
 
+function setSubmitLoading(form, isLoading, loadingText) {
+  const submitBtn = form?.querySelector('button[type="submit"]');
+  if (!submitBtn) return;
+
+  if (isLoading) {
+    if (!submitBtn.dataset.originalLabel) {
+      submitBtn.dataset.originalLabel = submitBtn.innerHTML;
+    }
+    submitBtn.disabled = true;
+    submitBtn.classList.add('is-loading');
+    submitBtn.innerHTML = `<span class="btn-spinner" aria-hidden="true"></span>${loadingText}`;
+    return;
+  }
+
+  submitBtn.disabled = false;
+  submitBtn.classList.remove('is-loading');
+  if (submitBtn.dataset.originalLabel) {
+    submitBtn.innerHTML = submitBtn.dataset.originalLabel;
+  }
+}
+
 async function fetchSessionUser() {
   try {
     const data = await apiFetch('/api/auth/me');
@@ -472,6 +493,7 @@ async function handleBulkStudentUploadForm() {
     }
     const fd = new FormData();
     fd.append('file', fileInput.files[0]);
+    setSubmitLoading(form, true, 'Creating Students...');
     try {
       const res = await fetch(apiBase + '/api/admin/bulk-students', {
         method: 'POST',
@@ -487,6 +509,8 @@ async function handleBulkStudentUploadForm() {
       await loadUsers('user-table');
     } catch (err) {
       showMessage('bulk-student-msg', err.message, true);
+    } finally {
+      setSubmitLoading(form, false);
     }
   });
 }
@@ -505,6 +529,7 @@ async function handleBulkFacultyUploadForm() {
     }
     const fd = new FormData();
     fd.append('file', fileInput.files[0]);
+    setSubmitLoading(form, true, 'Creating Faculty...');
     try {
       const res = await fetch(apiBase + '/api/admin/bulk-faculty', {
         method: 'POST',
@@ -520,6 +545,8 @@ async function handleBulkFacultyUploadForm() {
       await loadUsers('user-table');
     } catch (err) {
       showMessage('bulk-faculty-msg', err.message, true);
+    } finally {
+      setSubmitLoading(form, false);
     }
   });
 }
