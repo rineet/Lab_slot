@@ -97,6 +97,19 @@ header h2:hover svg {
   transform: rotate(-5deg);
 }
 
+#user-info {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+#user-info button {
+  width: auto;
+  flex: 0 0 auto;
+}
+
 nav {
   display: flex;
   gap: 12px;
@@ -1933,8 +1946,11 @@ tr:last-child td {
   #user-info {
     width: 100%;
     display: flex;
-    justify-content: space-between;
+    flex-direction: row;
+    justify-content: flex-start;
     align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
   }
 
   nav {

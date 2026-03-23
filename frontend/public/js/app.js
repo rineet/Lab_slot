@@ -71,6 +71,43 @@ async function getUser() {
   return await fetchSessionUser();
 }
 
+async function fetchNotificationCountByRole(role) {
+  const endpoint = role === 'Student'
+    ? '/api/document-requests/student/my'
+    : '/api/document-requests/inbox';
+  const res = await fetch(endpoint, { credentials: 'include' });
+  if (!res.ok) return 0;
+  const items = await res.json();
+  if (role === 'Student') {
+    return items.filter((r) => r.status === 'Approved').length;
+  }
+  return items.filter((r) => r.status === 'Pending' || r.status === 'Forwarded').length;
+}
+
+async function setupNotificationButton() {
+  const notificationBtn = document.getElementById('notification-btn');
+  if (!notificationBtn) return;
+
+  const notificationCount = document.getElementById('notification-count');
+  const user = await getUser();
+  if (!user || !['Student', 'Faculty', 'Admin'].includes(user.role)) return;
+
+  notificationBtn.style.display = 'inline-flex';
+  notificationBtn.addEventListener('click', () => {
+    window.location.href = '/notifications.html';
+  });
+
+  if (!notificationCount) return;
+
+  const count = await fetchNotificationCountByRole(user.role);
+  if (count > 0) {
+    notificationCount.textContent = String(count);
+    notificationCount.style.display = 'inline-flex';
+  } else {
+    notificationCount.style.display = 'none';
+  }
+}
+
 async function handleChangePasswordForm(formId = 'change-password-form', msgId = 'change-password-msg') {
   const form = document.getElementById(formId);
   if (!form) return;
@@ -97,7 +134,7 @@ async function handleChangePasswordForm(formId = 'change-password-form', msgId =
 }
 
 // Auth forms
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
   const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
   const loginForm = document.getElementById('login-form');
@@ -158,6 +195,8 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   }
+
+  await setupNotificationButton();
 });
 
 // Student dashboard helpers
@@ -1140,6 +1179,8 @@ window.app = {
   handleMarksPublishForm,
   handleBulkStudentUploadForm,
   handleBulkFacultyUploadForm,
+  fetchNotificationCountByRole,
+  setupNotificationButton,
   highlightActiveNav,
   buildNav,
   getUser
