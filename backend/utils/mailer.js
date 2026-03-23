@@ -26,14 +26,17 @@ function getTransporter() {
   return transporter;
 }
 
-async function sendMail({ to, subject, text, html }) {
+async function sendMail({ to, cc, bcc, subject, text, html, attachments }) {
   const transport = getTransporter();
   return transport.sendMail({
     from: `CampusFlow <${SMTP_USER}>`,
     to,
+    cc,
+    bcc,
     subject,
     text,
-    html
+    html,
+    attachments
   });
 }
 

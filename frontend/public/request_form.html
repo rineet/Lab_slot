@@ -36,11 +36,19 @@
           </div>
           <div>
             <label for="cc">CC (optional)</label>
-            <select id="cc" name="cc" multiple></select>
+            <div class="recipient-picker">
+              <select id="cc" name="cc"></select>
+              <button type="button" id="add-cc-recipient" class="secondary">Add</button>
+            </div>
+            <div id="cc-selected" class="selected-recipients muted">No CC recipients added.</div>
           </div>
           <div>
             <label for="bcc">BCC (optional)</label>
-            <select id="bcc" name="bcc" multiple></select>
+            <div class="recipient-picker">
+              <select id="bcc" name="bcc"></select>
+              <button type="button" id="add-bcc-recipient" class="secondary">Add</button>
+            </div>
+            <div id="bcc-selected" class="selected-recipients muted">No BCC recipients added.</div>
           </div>
           <div>
             <label for="subject">Subject</label>
@@ -51,8 +59,14 @@
         <label for="shortMessage">Short Message</label>
         <textarea id="shortMessage" name="shortMessage" rows="3" placeholder="Optional note for recipient"></textarea>
 
-        <label for="document">Upload PDF Document</label>
-        <input id="document" name="document" type="file" accept="application/pdf,.pdf" required />
+        <div class="request-upload-group">
+          <label for="document">Upload PDF Document</label>
+          <input id="document" name="document" type="file" accept="application/pdf,.pdf" required />
+        </div>
+
+        <div id="request-submit-progress" class="request-submit-progress" aria-hidden="true">
+          <div class="request-submit-progress-bar"></div>
+        </div>
 
         <button type="submit" class="btn btn-primary">Submit Request</button>
       </form>

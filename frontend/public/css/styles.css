@@ -1342,6 +1342,104 @@ tr:last-child td {
   resize: vertical;
 }
 
+.request-upload-group {
+  margin-top: 12px;
+  margin-bottom: 14px;
+}
+
+.request-upload-group label {
+  margin-bottom: 8px;
+}
+
+#request-form button[type='submit'] {
+  margin-top: 8px;
+}
+
+.request-submit-progress {
+  position: relative;
+  display: none;
+  height: 6px;
+  border-radius: 999px;
+  background: #e2e8f0;
+  overflow: hidden;
+  margin: 8px 0 10px;
+}
+
+.request-submit-progress.active {
+  display: block;
+}
+
+.request-submit-progress-bar {
+  height: 100%;
+  width: 35%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--primary), var(--secondary));
+  animation: requestLoading 1s linear infinite;
+}
+
+@keyframes requestLoading {
+  0% {
+    transform: translateX(-120%);
+  }
+  100% {
+    transform: translateX(320%);
+  }
+}
+
+.recipient-picker {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 10px;
+  align-items: center;
+}
+
+.recipient-picker button {
+  width: auto;
+  min-width: 96px;
+  padding: 10px 14px;
+}
+
+.recipient-picker button::before {
+  display: none;
+}
+
+.recipient-picker button:hover {
+  transform: none;
+}
+
+.selected-recipients {
+  margin-top: 8px;
+  margin-bottom: 6px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  min-height: 24px;
+}
+
+.recipient-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--primary-light);
+  color: var(--primary);
+  border: 1px solid rgba(79, 70, 229, 0.2);
+  border-radius: 999px;
+  padding: 4px 10px;
+  font-size: 0.85rem;
+}
+
+.recipient-chip button {
+  all: unset;
+  cursor: pointer;
+  font-weight: 700;
+  line-height: 1;
+  padding: 0 2px;
+}
+
+.recipient-chip button:hover {
+  color: var(--primary-hover);
+}
+
 @media (max-width: 900px) {
   .form-grid.two-cols {
     grid-template-columns: 1fr;

@@ -1,5 +1,55 @@
 const Request = require('../models/Request');
 const User = require('../models/User');
+const { sendMail } = require('../utils/mailer');
+
+function buildRecipientMap(users) {
+  return new Map(users.map((u) => [String(u._id), u]));
+}
+
+async function sendRequestCreatedEmail({
+  req,
+  requestId,
+  studentName,
+  subject,
+  shortMessage,
+  toUser,
+  ccUsers,
+  bccUsers,
+  attachment
+}) {
+  try {
+    const frontendBase = (process.env.FRONTEND_URL || `${req.protocol}://${req.get('host')}`).replace(/\/$/, '');
+    const inboxUrl = `${frontendBase}/professor_dashboard.html`;
+    const messageText = shortMessage || '(No message provided)';
+
+    const toList = toUser?.email ? [toUser.email] : [];
+    const ccList = ccUsers.map((u) => u.email).filter(Boolean);
+    const bccList = bccUsers.map((u) => u.email).filter(Boolean);
+
+    if (!toList.length) return;
+
+    await sendMail({
+      to: toList.join(', '),
+      cc: ccList.length ? ccList.join(', ') : undefined,
+      bcc: bccList.length ? bccList.join(', ') : undefined,
+      subject: `CampusFlow: New Document Approval Request - ${subject}`,
+      text: `A new document approval request has been submitted.\n\nRequest ID: ${requestId}\nStudent: ${studentName}\nSubject: ${subject}\nMessage: ${messageText}\n\nOpen inbox: ${inboxUrl}`,
+      attachments: attachment
+        ? [
+            {
+              filename: attachment.filename,
+              content: attachment.content,
+              contentType: attachment.contentType
+            }
+          ]
+        : undefined
+    });
+    return { sent: true };
+  } catch (err) {
+    console.warn('[document-request] email notification failed:', err.message);
+    return { sent: false, error: err.message };
+  }
+}
 
 async function getStudentProfile(req) {
   const user = await User.findById(req.user.id).select('name');
@@ -61,18 +111,25 @@ exports.createRequest = async (req, res, next) => {
       _id: { $in: [primaryTo, ...mergedCC, ...mergedBCC] },
       role: { $in: ['Faculty', 'Admin'] },
       isActive: true
-    }).select('_id');
+    }).select('_id name email role');
     const validRecipientIds = new Set(validRecipients.map((u) => String(u._id)));
     if (!validRecipientIds.has(String(primaryTo))) {
       return res.status(400).json({ message: 'Primary To recipient must be an active Faculty/Admin user' });
     }
 
+    const recipientMap = buildRecipientMap(validRecipients);
+    const toUser = recipientMap.get(String(primaryTo)) || null;
+    const ccIds = mergedCC.filter((id) => validRecipientIds.has(String(id)));
+    const bccIds = mergedBCC.filter((id) => validRecipientIds.has(String(id)));
+    const ccUsers = ccIds.map((id) => recipientMap.get(String(id))).filter(Boolean);
+    const bccUsers = bccIds.map((id) => recipientMap.get(String(id))).filter(Boolean);
+
     const created = await Request.create({
       studentId: req.user.id,
       name: (name || profile?.name || 'Student').trim(),
       to: primaryTo,
-      cc: mergedCC.filter((id) => validRecipientIds.has(String(id))),
-      bcc: mergedBCC.filter((id) => validRecipientIds.has(String(id))),
+      cc: ccIds,
+      bcc: bccIds,
       subject: subject.trim(),
       shortMessage: shortMessage ? shortMessage.trim() : '',
       documentPath: '',
@@ -84,8 +141,30 @@ exports.createRequest = async (req, res, next) => {
       status: 'Pending'
     });
 
+    const mailResult = await sendRequestCreatedEmail({
+      req,
+      requestId: String(created._id),
+      studentName: created.name,
+      subject: created.subject,
+      shortMessage: created.shortMessage,
+      toUser,
+      ccUsers,
+      bccUsers,
+      attachment: req.file
+        ? {
+            filename: created.documentName || req.file.originalname || 'document.pdf',
+            content: req.file.buffer,
+            contentType: created.documentMimeType || req.file.mimetype || 'application/pdf'
+          }
+        : null
+    });
+
     return res.status(201).json({
-      message: 'Request submitted successfully',
+      message: mailResult.sent
+        ? 'Request submitted successfully and email notification sent'
+        : 'Request submitted successfully, but email notification failed',
+      mailSent: Boolean(mailResult.sent),
+      mailError: mailResult.sent ? undefined : mailResult.error,
       request: {
         _id: created._id,
         subject: created.subject,
