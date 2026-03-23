@@ -128,6 +128,16 @@ function setRequestSubmitLoading(form, isLoading) {
   }
 }
 
+function getDocumentViewUrl(request) {
+  if (request && request.documentPath && String(request.documentPath).trim()) {
+    return String(request.documentPath).trim();
+  }
+  if (request && request._id) {
+    return `/api/document-requests/${request._id}/document`;
+  }
+  return '#';
+}
+
 async function initRequestForm() {
   const form = document.getElementById('request-form');
   if (!form) return;
@@ -294,7 +304,7 @@ function renderStudentRequests(container, rows) {
               <td>${r.subject}</td>
               <td>${r.to?.name || '-'}</td>
               <td><span class="badge">${r.status}</span></td>
-              <td><a href="${r.documentPath}" target="_blank" rel="noopener noreferrer">View</a></td>
+              <td><a href="${getDocumentViewUrl(r)}" target="_blank" rel="noopener noreferrer">View</a></td>
             </tr>`
           )
           .join('')}
@@ -329,11 +339,12 @@ function renderInbox(container, rows, recipients) {
 
   container.innerHTML = rows
     .map((r) => {
+      const documentUrl = getDocumentViewUrl(r);
       const canTakeDecision = r.status === 'Pending' || r.status === 'Forwarded';
 
       const actionBlock = canTakeDecision
         ? `<div style="margin-top: 8px; display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
-          <a class="btn btn-secondary" href="${r.documentPath}" target="_blank" rel="noopener noreferrer">Preview PDF</a>
+          <a class="btn btn-secondary" href="${documentUrl}" target="_blank" rel="noopener noreferrer">Preview PDF</a>
           <button class="btn btn-primary" data-approve="${r._id}">Approve</button>
           <button class="btn btn-secondary" data-reject="${r._id}">Reject</button>
         </div>
@@ -346,7 +357,7 @@ function renderInbox(container, rows, recipients) {
           <input id="forward_msg_${r._id}" placeholder="Optional forward message" style="grid-column: 1 / 3;" />
         </div>`
         : `<div style="margin-top: 8px; display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
-          <a class="btn btn-secondary" href="${r.documentPath}" target="_blank" rel="noopener noreferrer">Preview PDF</a>
+          <a class="btn btn-secondary" href="${documentUrl}" target="_blank" rel="noopener noreferrer">Preview PDF</a>
         </div>
         <div class="muted" style="margin-top:8px;">This request is ${r.status}. Decision options are disabled.</div>`;
 
