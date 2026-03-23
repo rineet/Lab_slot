@@ -551,6 +551,7 @@ nav a.active::after {
   border-radius: 2px;
 }
 
+
 /* Features Grid */
 .features-grid {
   display: grid;
