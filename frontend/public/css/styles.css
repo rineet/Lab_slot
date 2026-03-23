@@ -94,6 +94,7 @@ header h2 svg {
   transition: transform 0.3s ease;
 }
 
+
 header h2:hover svg {
   transform: rotate(-5deg);
 }
