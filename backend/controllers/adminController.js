@@ -27,6 +27,25 @@ function generatePassword(length = 10) {
   return out;
 }
 
+async function sendQueuedEmails(emailJobs, label) {
+  if (!emailJobs.length) return;
+
+  const settled = await Promise.allSettled(
+    emailJobs.map((job) =>
+      sendMail({
+        to: job.to,
+        subject: job.subject,
+        text: job.text
+      })
+    )
+  );
+
+  const failures = settled.filter((item) => item.status === 'rejected');
+  if (failures.length) {
+    console.warn(`[bulk-${label}] ${failures.length}/${emailJobs.length} emails failed to send`);
+  }
+}
+
 exports.listUsers = async (req, res, next) => {
   try {
     const users = await User.find();
@@ -133,14 +152,21 @@ exports.bulkCreateStudents = async (req, res, next) => {
     const rows = await parseFirstSheetBuffer(req.file.buffer);
 
     const results = { created: 0, skipped: 0, errors: [] };
+    const emailJobs = [];
 
-    // eslint-disable-next-line no-restricted-syntax
-    console.log(rows);
     for (const row of rows) {
-      const email = getField(row, 'Email');
-      const rollNumber = getField(row, 'Roll no');
-      const name = getField(row, 'Name');
-      // console.log(email, rollNumber, name);
+      const rawEmail = getField(row, 'Email');
+      const rawRollNumber =
+        getField(row, 'Roll Number') ||
+        getField(row, 'Roll No') ||
+        getField(row, 'Roll no') ||
+        getField(row, 'rollNumber');
+      const rawName = getField(row, 'Name');
+
+      const email = String(rawEmail || '').trim().toLowerCase();
+      const rollNumber = String(rawRollNumber || '').trim();
+      const name = String(rawName || '').trim() || `Student ${rollNumber}`;
+
       if (!email || !rollNumber) {
         results.skipped += 1;
         // eslint-disable-next-line no-continue
@@ -161,15 +187,11 @@ exports.bulkCreateStudents = async (req, res, next) => {
         role: 'Student',
         rollNumber
       });
-      try {
-        await sendMail({
-          to: email,
-          subject: 'CampusFlow Student Account',
-          text: `Hello ${name},\n\nYour student account has been created.\nEmail: ${email}\nRoll Number: ${rollNumber}\nTemporary Password: ${plainPassword}\n\nPlease login and change your password.`
-        });
-      } catch (err) {
-        results.errors.push(`Email failed for ${email}: ${err.message}`);
-      }
+      emailJobs.push({
+        to: email,
+        subject: 'CampusFlow Student Account',
+        text: `Hello ${name},\n\nYour student account has been created.\nEmail: ${email}\nRoll Number: ${rollNumber}\nTemporary Password: ${plainPassword}\n\nPlease login and change your password.`
+      });
       await logAction({
         actorId: req.user.id,
         action: 'student_bulk_create',
@@ -180,7 +202,9 @@ exports.bulkCreateStudents = async (req, res, next) => {
       results.created += 1;
     }
 
-    return res.json(results);
+    res.json({ ...results, emailQueued: emailJobs.length });
+    void sendQueuedEmails(emailJobs, 'students');
+    return null;
   } catch (err) {
     return next(err);
   }
@@ -196,12 +220,22 @@ exports.bulkCreateFaculty = async (req, res, next) => {
     const rows = await parseFirstSheetBuffer(req.file.buffer);
 
     const results = { created: 0, skipped: 0, errors: [] };
+    const emailJobs = [];
 
     // eslint-disable-next-line no-restricted-syntax
     for (const row of rows) {
-      const email = getField(row, 'email');
-      const facultyId = getField(row, 'facultyId');
-      const name = getField(row, 'name') || 'Faculty';
+      const rawEmail = getField(row, 'Email');
+      const rawFacultyId =
+        getField(row, 'Faculty ID') ||
+        getField(row, 'Faculty Id') ||
+        getField(row, 'facultyId') ||
+        getField(row, 'FacultyID');
+      const rawName = getField(row, 'Name');
+
+      const email = String(rawEmail || '').trim().toLowerCase();
+      const facultyId = String(rawFacultyId || '').trim();
+      const name = String(rawName || '').trim() || `Faculty ${facultyId}`;
+
       if (!email || !facultyId) {
         results.skipped += 1;
         // eslint-disable-next-line no-continue
@@ -222,15 +256,11 @@ exports.bulkCreateFaculty = async (req, res, next) => {
         role: 'Faculty',
         facultyId
       });
-      try {
-        await sendMail({
-          to: email,
-          subject: 'CampusFlow Faculty Account',
-          text: `Hello ${name},\n\nYour faculty account has been created.\nEmail: ${email}\nFaculty ID: ${facultyId}\nTemporary Password: ${plainPassword}\n\nPlease login and change your password.`
-        });
-      } catch (err) {
-        results.errors.push(`Email failed for ${email}: ${err.message}`);
-      }
+      emailJobs.push({
+        to: email,
+        subject: 'CampusFlow Faculty Account',
+        text: `Hello ${name},\n\nYour faculty account has been created.\nEmail: ${email}\nFaculty ID: ${facultyId}\nTemporary Password: ${plainPassword}\n\nPlease login and change your password.`
+      });
       await logAction({
         actorId: req.user.id,
         action: 'faculty_bulk_create',
@@ -241,7 +271,9 @@ exports.bulkCreateFaculty = async (req, res, next) => {
       results.created += 1;
     }
 
-    return res.json(results);
+    res.json({ ...results, emailQueued: emailJobs.length });
+    void sendQueuedEmails(emailJobs, 'faculty');
+    return null;
   } catch (err) {
     return next(err);
   }
