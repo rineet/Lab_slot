@@ -1051,6 +1051,20 @@ function highlightActiveNav() {
   });
 }
 
+function buildNotificationNav(role) {
+  const items = [{ href: '/notifications.html', text: 'Notifications' }];
+  if (role === 'Student') {
+    items.push(
+      { href: '/student_request_dashboard.html', text: 'Student Requests' },
+    );
+  } else if (role === 'Faculty') {
+    items.push(
+      { href: '/professor_dashboard.html', text: 'Professor Inbox' },
+    );
+  }
+  return items.map(i => `<a href="${i.href}">${i.text}</a>`).join('');
+}
+
 // build navigation markup according to user role
 function buildNav(role) {
   const items = [{ href: '/index.html', text: 'Home' }];
@@ -1058,6 +1072,8 @@ function buildNav(role) {
     items.push(
       { href: '/student-dashboard.html', text: 'Dashboard' },
       { href: '/request.html', text: 'New Request' },
+      { href: '/request_form.html', text: 'Doc Form' },
+      { href: '/student_request_dashboard.html', text: 'Doc Status' },
       { href: '/calendar.html', text: 'Calendar' },
       { href: '/history.html', text: 'Bookings History' },
       { href: '/attendance.html', text: 'My Attendance' },

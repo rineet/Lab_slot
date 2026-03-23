@@ -6,6 +6,18 @@
   <title>My Document Requests</title>
   <link rel="stylesheet" href="/css/styles.css" />
 </head>
+<script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      const user = await app.requireAuth();
+      // build role-specific navigation
+      if (user) document.querySelector('nav').innerHTML = app.buildNav(user.role);
+      await app.requireAuth(['Student']);
+      app.loadResources('resource-list');
+      app.loadMyRequests('my-requests');
+      app.handleChangePasswordForm('change-password-form', 'change-password-msg');
+      app.highlightActiveNav();
+    });
+  </script>
 <body>
   <div class="shell">
     <header>
@@ -17,9 +29,16 @@
     </header>
 
     <nav>
-      <a href="/student-dashboard.html">Student Dashboard</a>
-      <a href="/request_form.html">New Request</a>
-      <a href="/student_request_dashboard.html" class="active">My Requests</a>
+      <a href="/index.html">Home</a>
+      <a href="/student-dashboard.html">Dashboard</a>
+      <a href="/request.html">New Request</a>
+      <a href="/request_form.html">Doc Approval Form</a>
+      <a href="/student_request_dashboard.html">Doc Approval Status</a>
+      <a href="/calendar.html">Calendar</a>
+      <a href="/history.html">Bookings History</a>
+      <a href="/attendance.html">My Attendance</a>
+      <a href="/marks.html">My Marks</a>
+      <a href="/complaints.html">Complaints</a>
     </nav>
 
     <section class="card">

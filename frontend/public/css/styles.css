@@ -107,11 +107,13 @@ nav {
   border: 1px solid var(--border);
   width: fit-content;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  overflow-y: scroll;
 }
 
 nav a {
   text-decoration: none;
   color: var(--text-muted);
+  width: fit-content;
   font-weight: 500;
   font-size: 0.9rem;
   padding: 8px 16px;
@@ -922,10 +924,6 @@ button.secondary {
   color: var(--primary);
   border: 2px solid var(--primary);
   box-shadow: 0 2px 8px rgba(79, 70, 229, 0.15);
-}
-
-button.secondary::before {
-  background: var(--primary-light);
 }
 
 button.secondary:hover {
