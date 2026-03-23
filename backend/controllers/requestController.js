@@ -1,6 +1,8 @@
+const mongoose = require('mongoose');
 const Request = require('../models/Request');
 const User = require('../models/User');
 const { sendMail } = require('../utils/mailer');
+const { hasS3Config, buildRequestDocumentKey, uploadBufferToS3, getBufferFromS3 } = require('../utils/s3Storage');
 
 function buildRecipientMap(users) {
   return new Map(users.map((u) => [String(u._id), u]));
@@ -124,7 +126,30 @@ exports.createRequest = async (req, res, next) => {
     const ccUsers = ccIds.map((id) => recipientMap.get(String(id))).filter(Boolean);
     const bccUsers = bccIds.map((id) => recipientMap.get(String(id))).filter(Boolean);
 
+    const requestId = new mongoose.Types.ObjectId();
+    const fileName = req.file.originalname || 'document.pdf';
+    const fileMimeType = req.file.mimetype || 'application/pdf';
+
+    let documentS3Key = '';
+    let documentData = req.file.buffer;
+
+    if (hasS3Config()) {
+      const s3Key = buildRequestDocumentKey({ requestId: String(requestId), fileName });
+      try {
+        await uploadBufferToS3({
+          key: s3Key,
+          contentType: fileMimeType,
+          body: req.file.buffer
+        });
+        documentS3Key = s3Key;
+        documentData = undefined;
+      } catch (s3Err) {
+        console.warn('[document-request] S3 upload failed, falling back to MongoDB buffer:', s3Err.message);
+      }
+    }
+
     const created = await Request.create({
+      _id: requestId,
       studentId: req.user.id,
       name: (name || profile?.name || 'Student').trim(),
       to: primaryTo,
@@ -133,10 +158,11 @@ exports.createRequest = async (req, res, next) => {
       subject: subject.trim(),
       shortMessage: shortMessage ? shortMessage.trim() : '',
       documentPath: '',
-      documentName: req.file.originalname || 'document.pdf',
-      documentMimeType: req.file.mimetype || 'application/pdf',
+      documentS3Key,
+      documentName: fileName,
+      documentMimeType: fileMimeType,
       documentSize: req.file.size,
-      documentData: req.file.buffer,
+      documentData,
       approvalType: 'approval',
       status: 'Pending'
     });
@@ -183,7 +209,7 @@ exports.createRequest = async (req, res, next) => {
 exports.getRequestDocument = async (req, res, next) => {
   try {
     const request = await Request.findById(req.params.id).select(
-      'studentId to cc bcc forwardedTo documentName documentMimeType documentData documentPath'
+      'studentId to cc bcc forwardedTo documentName documentMimeType documentData documentPath documentS3Key'
     );
     if (!request) {
       return res.status(404).json({ message: 'Request not found' });
@@ -199,6 +225,18 @@ exports.getRequestDocument = async (req, res, next) => {
 
     if (!canAccess) {
       return res.status(403).json({ message: 'Not authorized to view this document' });
+    }
+
+    if (request.documentS3Key) {
+      try {
+        const s3File = await getBufferFromS3(request.documentS3Key);
+        const fileName = request.documentName || 'document.pdf';
+        res.setHeader('Content-Type', request.documentMimeType || 'application/pdf');
+        res.setHeader('Content-Disposition', `inline; filename="${fileName.replace(/\"/g, '')}"`);
+        return res.send(s3File);
+      } catch (s3Err) {
+        console.warn('[document-request] failed to read from S3:', s3Err.message);
+      }
     }
 
     if (request.documentData && request.documentData.length) {

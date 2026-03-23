@@ -43,6 +43,10 @@ const requestSchema = new mongoose.Schema(
       type: String,
       default: ''
     },
+    documentS3Key: {
+      type: String,
+      default: ''
+    },
     documentName: {
       type: String,
       default: 'document.pdf',
