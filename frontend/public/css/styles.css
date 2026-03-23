@@ -282,6 +282,10 @@ nav a.active::after {
   gap: 8px;
 }
 
+
+
+
+
 .notification-list li {
   border: 1px solid var(--border);
   border-radius: 10px;
