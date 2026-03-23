@@ -736,7 +736,9 @@ async function handleMarksUploadForm() {
       if (!res.ok) {
         throw new Error(data.message || 'Upload failed');
       }
-      showMessage('marks-upload-msg', `Uploaded: ${data.inserted}, Skipped: ${data.skipped}`);
+      const baseMsg = `Uploaded: ${data.inserted}, Skipped: ${data.skipped}`;
+      const sampleError = Array.isArray(data.errors) && data.errors.length ? ` | Example: ${data.errors[0]}` : '';
+      showMessage('marks-upload-msg', `${baseMsg}${sampleError}`);
       form.reset();
       document.getElementById('marks-file-name').textContent = 'Click to upload or drag file here';
     } catch (err) {
@@ -1114,8 +1116,6 @@ function buildNav(role) {
     items.push(
       { href: '/student-dashboard.html', text: 'Dashboard' },
       { href: '/request.html', text: 'New Request' },
-      { href: '/request_form.html', text: 'Doc Form' },
-      { href: '/student_request_dashboard.html', text: 'Doc Status' },
       { href: '/calendar.html', text: 'Calendar' },
       { href: '/history.html', text: 'Bookings History' },
       { href: '/attendance.html', text: 'My Attendance' },
