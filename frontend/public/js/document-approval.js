@@ -134,7 +134,7 @@ async function initRequestForm() {
 
   const user = await approvalApi.me();
   if (!user || user.role !== 'Student') {
-    window.location.href = '/login.html';
+    window.location.href = '/login-student.html';
     return;
   }
 
@@ -308,7 +308,7 @@ async function initStudentDashboard() {
 
   const user = await approvalApi.me();
   if (!user || user.role !== 'Student') {
-    window.location.href = '/login.html';
+    window.location.href = '/login-student.html';
     return;
   }
 
@@ -366,7 +366,7 @@ async function initProfessorDashboard() {
 
   const user = await approvalApi.me();
   if (!user || !['Faculty', 'Admin'].includes(user.role)) {
-    window.location.href = '/login.html';
+    window.location.href = '/login-student.html';
     return;
   }
 

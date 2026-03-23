@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Login - Lab Booking System</title>
+  <link rel="stylesheet" href="/css/styles.css" />
+  <script defer src="/js/app.js"></script>
+</head>
+
+<body class="role-login-page admin-login-page">
+  <div class="shell auth-wrapper auth-shell">
+    <section class="role-login-layout">
+      <div class="auth-card role-auth-card">
+        <div class="auth-card-header">
+          <div class="auth-role-pills"><span>Admin Access</span></div>
+          <h2>Admin Sign In</h2>
+          <p class="subtitle">Use your administrator credentials to continue.</p>
+        </div>
+
+        <form id="login-form">
+          <div class="form-group">
+            <label for="admin-login-email">Email Address</label>
+            <input id="admin-login-email" name="email" type="email" required maxlength="120"
+              autocomplete="username" placeholder="admin@university.edu"
+              pattern="[^\s@]+@[^\s@]+\.[^\s@]+" title="Enter a valid email address like name@university.edu" />
+          </div>
+          <div class="form-group">
+            <label for="admin-login-password">Password</label>
+            <input id="admin-login-password" name="password" type="password" required
+              autocomplete="current-password" placeholder="Enter your password" />
+          </div>
+          <button type="submit" class="auth-submit-btn">Enter Admin Portal</button>
+        </form>
+
+        <div id="login-msg" class="auth-message"></div>
+        <div class="auth-footer-link">
+          <a href="/index.html">back</a>
+        </div>
+      </div>
+    </section>
+  </div>
+</body>
+
+</html>

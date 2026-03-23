@@ -4,6 +4,7 @@ const path = require('path');
 const multer = require('multer');
 const auth = require('../middleware/authMiddleware');
 const roleMiddleware = require('../middleware/roleMiddleware');
+const validationMiddleware = require('../middleware/validationMiddleware');
 const requestController = require('../controllers/requestController');
 
 const router = express.Router();
@@ -33,6 +34,7 @@ router.post(
   auth,
   roleMiddleware(['Student']),
   uploadDocument.single('document'),
+  validationMiddleware([validationMiddleware.validateDocumentRequest]),
   requestController.createRequest
 );
 

@@ -83,7 +83,7 @@
       <div class="login-boxes-grid">
 
 
-        <div class="login-box student-box" onclick="window.location.href='/login.html'">
+        <div class="login-box student-box" onclick="window.location.href='/login-student.html'">
 
           <div class="login-icon">
 
@@ -105,7 +105,7 @@
 
 
 
-        <div class="login-box faculty-box" onclick="window.location.href='/login.html'">
+        <div class="login-box faculty-box" onclick="window.location.href='/login-faculty.html'">
 
           <div class="login-icon">
 
@@ -127,7 +127,7 @@
 
 
 
-        <div class="login-box admin-box" onclick="window.location.href='/login.html'">
+        <div class="login-box admin-box" onclick="window.location.href='/login-admin.html'">
 
           <div class="login-icon">
 
@@ -203,17 +203,18 @@
 
 
 
-    <h3 class="section-title">Key Features</h3>
+    <section id="key-features-section" style="display: none;">
+      <h3 class="section-title">Key Features</h3>
 
-    <div class="card" style="margin-bottom: 28px;">
-      <h3>Where To Check Document Approval System</h3>
-      <p class="muted">After login, open these pages directly:</p>
-      <p><a href="/request_form.html"><strong>Student submit form</strong></a></p>
-      <p><a href="/student_request_dashboard.html"><strong>Student status dashboard</strong></a></p>
-      <p><a href="/professor_dashboard.html"><strong>Professor/Admin inbox</strong></a></p>
-    </div>
+      <div class="card" style="margin-bottom: 28px;">
+        <h3>Where To Check Document Approval System</h3>
+        <p class="muted">After login, open these pages directly:</p>
+        <p><a href="/request_form.html"><strong>Student submit form</strong></a></p>
+        <p><a href="/student_request_dashboard.html"><strong>Student status dashboard</strong></a></p>
+        <p><a href="/professor_dashboard.html"><strong>Professor/Admin inbox</strong></a></p>
+      </div>
 
-    <div class="features-grid">
+      <div class="features-grid">
 
 
       <div class="feature-item">
@@ -246,7 +247,8 @@
         Fair resource allocation
       </div>
 
-    </div>
+      </div>
+    </section>
 
 
 
@@ -282,10 +284,13 @@
 
       const notificationBtn = document.getElementById('notification-btn');
 
+      const keyFeaturesSection = document.getElementById('key-features-section');
+
       if (user) {
 
         document.getElementById('logout-btn').style.display = 'inline-flex';
         if (notificationBtn) notificationBtn.style.display = 'inline-flex';
+        if (keyFeaturesSection) keyFeaturesSection.style.display = 'block';
 
         const grid = document.querySelector('.login-boxes-grid');
 

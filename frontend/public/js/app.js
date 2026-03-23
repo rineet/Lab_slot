@@ -59,7 +59,7 @@ async function fetchSessionUser() {
 async function requireAuth(roles) {
   const user = currentUser || (await fetchSessionUser());
   if (!user || (roles && !roles.includes(user.role))) {
-    window.location.href = '/login.html';
+    window.location.href = '/login-student.html';
     return null;
   }
   return user;
@@ -98,13 +98,28 @@ async function handleChangePasswordForm(formId = 'change-password-form', msgId =
 
 // Auth forms
 document.addEventListener('DOMContentLoaded', () => {
+  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
   const loginForm = document.getElementById('login-form');
   if (loginForm) {
     loginForm.addEventListener('submit', async (e) => {
       e.preventDefault();
       try {
-        const email = loginForm.email.value;
+        const email = loginForm.email.value.trim();
         const password = loginForm.password.value;
+
+        if (!emailPattern.test(email)) {
+          showMessage('login-msg', 'Enter a valid email address.', true);
+          loginForm.email.focus();
+          return;
+        }
+
+        if (!password.trim()) {
+          showMessage('login-msg', 'Password is required.', true);
+          loginForm.password.focus();
+          return;
+        }
+
         const data = await apiFetch('/api/auth/login', {
           method: 'POST',
           body: JSON.stringify({ email, password })
@@ -129,7 +144,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // ignore
       }
       currentUser = null;
-      window.location.href = '/login.html';
+      window.location.href = '/login-student.html';
     });
   }
 
