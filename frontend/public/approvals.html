@@ -9,6 +9,8 @@
   <script defer src="/js/app.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', async () => {
+      const user = await app.requireAuth();
+      if (user) document.querySelector('nav').innerHTML = app.buildNav(user.role);
       await app.requireAuth(['Faculty', 'Admin']);
       app.loadFacultyPending('pending-list');
       app.highlightActiveNav();

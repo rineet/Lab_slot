@@ -281,7 +281,6 @@
       const user = await app.getUser();
 
       const notificationBtn = document.getElementById('notification-btn');
-      const countEl = document.getElementById('notification-count');
 
       if (user) {
 
@@ -307,12 +306,6 @@ Go to Dashboard
           notificationBtn.addEventListener('click', () => {
             window.location.href = '/notifications.html';
           });
-
-          const count = await fetchNotificationCountByRole(user.role);
-          if (countEl) {
-            countEl.textContent = String(count);
-            countEl.style.display = count > 0 ? 'inline-flex' : 'none';
-          }
         }
 
       }

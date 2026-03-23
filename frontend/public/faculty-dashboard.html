@@ -9,6 +9,8 @@
   <script defer src="/js/app.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', async () => {
+      const user = await app.requireAuth();
+      if (user) document.querySelector('nav').innerHTML = app.buildNav(user.role);
       await app.requireAuth(['Faculty', 'Admin']);
       app.loadFacultyPending('pending-list');
       app.handleAttendanceUploadForm();
@@ -45,7 +47,7 @@
         <div class="card">
           <h3>Document Approval: Where To Check</h3>
           <p class="card-subtitle">Open the inbox below to review PDF requests and take actions.</p>
-          <p><strong>Inbox:</strong> <a href="/professor_dashboard.html">/professor_dashboard.html</a></p>
+          <p><strong>Inbox:</strong> <a href="/professor_dashboard.html">Doc Approval Inbox</a></p>
           <p><strong>Digital sign:</strong> open a request and use the Digital Sign button.</p>
         </div>
 

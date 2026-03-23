@@ -6,6 +6,14 @@
   <title>Professor Document Inbox</title>
   <link rel="stylesheet" href="/css/styles.css" />
 </head>
+<script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      const user = await app.requireAuth();
+      if (user) document.querySelector('nav').innerHTML = app.buildNav(user.role);
+      await app.requireAuth(['Faculty']);
+      app.highlightActiveNav();
+    });
+</script>
 <body>
   <div class="shell">
     <header>
@@ -17,8 +25,7 @@
     </header>
 
     <nav>
-      <a href="/faculty-dashboard.html">Faculty Dashboard</a>
-      <a href="/professor_dashboard.html" class="active">Approval Inbox</a>
+      
     </nav>
 
     <section class="card">

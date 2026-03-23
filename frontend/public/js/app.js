@@ -1039,30 +1039,18 @@ async function saveFacultyRole(id) {
 
 function highlightActiveNav() {
   const currentPath = window.location.pathname;
+  console.log('Current path:', currentPath);
   const navLinks = document.querySelectorAll('nav a');
   
   navLinks.forEach(link => {
     const linkPath = new URL(link.href).pathname;
+    console.log('Checking link:', linkPath);
     if (linkPath === currentPath) {
       link.classList.add('active');
     } else {
       link.classList.remove('active');
     }
   });
-}
-
-function buildNotificationNav(role) {
-  const items = [{ href: '/notifications.html', text: 'Notifications' }];
-  if (role === 'Student') {
-    items.push(
-      { href: '/student_request_dashboard.html', text: 'Student Requests' },
-    );
-  } else if (role === 'Faculty') {
-    items.push(
-      { href: '/professor_dashboard.html', text: 'Professor Inbox' },
-    );
-  }
-  return items.map(i => `<a href="${i.href}">${i.text}</a>`).join('');
 }
 
 // build navigation markup according to user role
@@ -1084,6 +1072,7 @@ function buildNav(role) {
     items.push(
       { href: '/faculty-dashboard.html', text: 'Dashboard' },
       { href: '/approvals.html', text: 'Approvals' },
+      { href: '/professor_dashboard.html', text: 'Doc Approval Inbox' },
       { href: '/calendar.html', text: 'Resource Calendar' },
       { href: '/complaints.html', text: 'Complaints' }
     );
