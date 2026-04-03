@@ -3,11 +3,11 @@
   "rewrites": [
     {
       "source": "/api/(.*)",
-      "destination": "https://api.library-api.me/api/$1"
+      "destination": "https://lab-slot.onrender.com"
     },
     {
       "source": "/uploads/(.*)",
-      "destination": "https://api.library-api.me/uploads/$1"
+      "destination": "https://lab-slot.onrender.com"
     }
   ]
 }
